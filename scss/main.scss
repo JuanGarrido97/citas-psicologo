@@ -1,0 +1,21 @@
+// ============================================
+// MAIN SCSS - Página Web Psicólogo
+// ============================================
+
+// Importar Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+// Configuración base
+@import 'variables';
+@import 'mixins';
+@import 'base';
+
+// Componentes / Secciones
+@import 'header';
+@import 'hero';
+@import 'about';
+@import 'certificates';
+@import 'plans';
+@import 'calendar';
+@import 'payment';
+@import 'footer';

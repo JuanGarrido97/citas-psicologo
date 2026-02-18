@@ -1,0 +1,224 @@
+// ============================================
+// SOBRE MÍ / ESTUDIOS
+// ============================================
+
+.about {
+  @include section-padding;
+  background: $color-white;
+}
+
+.about__content {
+  @include container;
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: $spacing-4xl;
+  align-items: start;
+  margin-bottom: $spacing-4xl;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-2xl;
+  }
+}
+
+.about__photo {
+  position: relative;
+
+  .photo-wrapper {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 3 / 4;
+    border-radius: $border-radius-xl;
+    overflow: hidden;
+    background: linear-gradient(135deg, $color-secondary-light, $color-primary-light);
+    @include flex-center;
+    position: relative;
+
+    @include mobile {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .placeholder-photo {
+      @include flex-column;
+      align-items: center;
+      gap: $spacing-md;
+      color: $color-primary-dark;
+
+      .photo-icon {
+        font-size: 4rem;
+        opacity: 0.6;
+      }
+
+      .photo-text {
+        font-size: $font-size-sm;
+        opacity: 0.6;
+        font-family: $font-heading;
+      }
+    }
+  }
+
+  .photo-decoration {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 3 / 4;
+    border: 3px solid $color-primary-light;
+    border-radius: $border-radius-xl;
+    z-index: -1;
+
+    @include mobile {
+      display: none;
+    }
+  }
+}
+
+.about__info {
+  h3 {
+    font-size: $font-size-xl;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-lg;
+  }
+
+  p {
+    color: $color-text-light;
+    line-height: 1.8;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.about__specialties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-2xl;
+}
+
+.specialty-tag {
+  background: rgba($color-primary, 0.1);
+  color: $color-primary-dark;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-xl;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  font-family: $font-heading;
+}
+
+// Línea de tiempo de estudios
+.about__timeline-section {
+  @include container;
+}
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-xl 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, $color-primary-light, $color-primary, $color-primary-light);
+
+    @include mobile {
+      left: 20px;
+    }
+  }
+}
+
+.timeline__item {
+  display: flex;
+  justify-content: flex-end;
+  width: 50%;
+  padding-right: $spacing-2xl;
+  margin-bottom: $spacing-2xl;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: $spacing-md;
+    width: 16px;
+    height: 16px;
+    background: $color-primary;
+    border: 3px solid $color-white;
+    border-radius: $border-radius-full;
+    box-shadow: $shadow-sm;
+  }
+
+  &:nth-child(even) {
+    justify-content: flex-start;
+    margin-left: 50%;
+    padding-left: $spacing-2xl;
+    padding-right: 0;
+
+    &::after {
+      left: -8px;
+      right: auto;
+    }
+  }
+
+  @include mobile {
+    width: 100%;
+    margin-left: 0 !important;
+    padding-left: 50px !important;
+    padding-right: 0 !important;
+    justify-content: flex-start !important;
+
+    &::after {
+      left: 13px !important;
+      right: auto !important;
+    }
+  }
+}
+
+.timeline__card {
+  @include card;
+  max-width: 350px;
+
+  .timeline__year {
+    display: inline-block;
+    background: $color-primary;
+    color: $color-white;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $border-radius;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    font-family: $font-heading;
+    margin-bottom: $spacing-sm;
+  }
+
+  h4 {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-xs;
+  }
+
+  .timeline__institution {
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: $color-text-light;
+    font-size: $font-size-sm;
+    line-height: 1.6;
+  }
+}

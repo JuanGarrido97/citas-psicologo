@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.">
+  <title>Dr. Ariel | Psicólogo Clínico</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============================================ -->
+  <!-- HEADER / NAVEGACIÓN -->
+  <!-- ============================================ -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="#inicio" class="header__logo">
+        <div class="logo-icon">P</div>
+        <div class="logo-text">Dr. <span>Ariel</span></div>
+      </a>
+
+      <nav class="header__nav" id="nav">
+        <a href="#inicio" class="header__nav-link active">Inicio</a>
+        <a href="#sobre-mi" class="header__nav-link">Sobre Mí</a>
+        <a href="#planes" class="header__nav-link">Planes</a>
+        <a href="#agendar" class="header__nav-link">Agendar Cita</a>
+        <a href="#contacto" class="header__nav-link">Contacto</a>
+        <a href="#agendar" class="header__cta">Agendar Cita</a>
+      </nav>
+
+      <button class="header__hamburger" id="hamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="header__nav-overlay" id="nav-overlay"></div>
+    </div>
+  </header>
+
+  <!-- ============================================ -->
+  <!-- HERO / INICIO -->
+  <!-- ============================================ -->
+  <section class="hero" id="inicio">
+    <div class="hero__content">
+      <div class="hero__text">
+        <span class="hero__badge">Lorem Ipsum Dolor Sit</span>
+        <h1>Lorem ipsum dolor <span>sit amet consectetur</span></h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+        <div class="hero__buttons">
+          <a href="#agendar" class="btn-primary">Agenda tu Consulta</a>
+          <a href="#sobre-mi" class="btn-secondary">Conóceme</a>
+        </div>
+      </div>
+
+      <div class="hero__image">
+        <div class="hero__image-wrapper">
+          <div class="placeholder-img">
+            <span class="placeholder-icon">&#128100;</span>
+            <span class="placeholder-text">Foto del Psicólogo</span>
+          </div>
+        </div>
+        <div class="hero__float-element hero__float-element--top">
+          <span class="float-icon">&#127891;</span>
+          +10 años de experiencia
+        </div>
+        <div class="hero__float-element hero__float-element--bottom">
+          <span class="float-icon">&#10084;</span>
+          +500 pacientes atendidos
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- SOBRE MÍ -->
+  <!-- ============================================ -->
+  <section class="about" id="sobre-mi">
+    <div class="about__content">
+      <h2 class="section-title">Sobre Mí</h2>
+      <p class="section-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+
+      <div class="about__grid fade-in">
+        <div class="about__photo">
+          <div class="photo-wrapper">
+            <div class="placeholder-photo">
+              <span class="photo-icon">&#128247;</span>
+              <span class="photo-text">Foto profesional</span>
+            </div>
+          </div>
+          <div class="photo-decoration"></div>
+        </div>
+
+        <div class="about__info">
+          <h3>Psicólogo Clínico</h3>
+          <h2>Dr. Ariel</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </p>
+          <p>
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+
+          <div class="about__specialties">
+            <span class="specialty-tag">Lorem Ipsum</span>
+            <span class="specialty-tag">Dolor Sit</span>
+            <span class="specialty-tag">Amet Consectetur</span>
+            <span class="specialty-tag">Adipiscing Elit</span>
+            <span class="specialty-tag">Sed Eiusmod</span>
+            <span class="specialty-tag">Tempor</span>
+            <span class="specialty-tag">Incididunt</span>
+          </div>
+
+          <a href="#agendar" class="btn-primary">Agenda una Consulta</a>
+        </div>
+      </div>
+
+      <!-- Línea de tiempo de estudios -->
+      <div class="about__timeline-section">
+        <h2 class="section-title">Formación Académica</h2>
+        <p class="section-subtitle">Lorem ipsum dolor sit amet consectetur</p>
+
+        <div class="timeline">
+          <div class="timeline__item fade-in">
+            <div class="timeline__card">
+              <span class="timeline__year">2012</span>
+              <h4>Lorem Ipsum Dolor Sit Amet</h4>
+              <p class="timeline__institution">Universitas Lorem Ipsum</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.</p>
+            </div>
+          </div>
+
+          <div class="timeline__item fade-in">
+            <div class="timeline__card">
+              <span class="timeline__year">2014</span>
+              <h4>Consectetur Adipiscing Elit</h4>
+              <p class="timeline__institution">Universitas Dolor Amet</p>
+              <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+            </div>
+          </div>
+
+          <div class="timeline__item fade-in">
+            <div class="timeline__card">
+              <span class="timeline__year">2017</span>
+              <h4>Sed Do Eiusmod Tempor</h4>
+              <p class="timeline__institution">Institutum Incididunt</p>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+            </div>
+          </div>
+
+          <div class="timeline__item fade-in">
+            <div class="timeline__card">
+              <span class="timeline__year">2020</span>
+              <h4>Ut Labore Et Dolore Magna</h4>
+              <p class="timeline__institution">Institutum Aliqua</p>
+              <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
+            </div>
+          </div>
+
+          <div class="timeline__item fade-in">
+            <div class="timeline__card">
+              <span class="timeline__year">2023</span>
+              <h4>Quis Nostrud Exercitation</h4>
+              <p class="timeline__institution">Universitas Ullamco</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- CERTIFICADOS -->
+  <!-- ============================================ -->
+  <section class="certificates" id="certificados">
+    <div class="certificates__content">
+      <h2 class="section-title">Certificados y Diplomas</h2>
+      <p class="section-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+
+      <div class="certificates__grid">
+        <!-- Certificado 1 -->
+        <div class="certificate-card fade-in">
+          <div class="certificate-card__image">
+            <div class="certificate-placeholder">
+              <span class="cert-icon">&#128220;</span>
+              <span class="cert-text">Certificado</span>
+            </div>
+            <!-- Reemplaza el div anterior con: <img src="img/certificado1.jpg" alt="Lorem Ipsum"> -->
+          </div>
+          <div class="certificate-card__info">
+            <h4>Lorem Ipsum Dolor Sit Amet</h4>
+            <p class="certificate-card__issuer">Universitas Lorem Ipsum</p>
+            <span class="certificate-card__year">2012</span>
+          </div>
+          <button class="certificate-card__expand" aria-label="Ver certificado" onclick="openCertificate(this)">
+            &#128269; Ver completo
+          </button>
+        </div>
+
+        <!-- Certificado 2 -->
+        <div class="certificate-card fade-in">
+          <div class="certificate-card__image">
+            <div class="certificate-placeholder">
+              <span class="cert-icon">&#128220;</span>
+              <span class="cert-text">Certificado</span>
+            </div>
+          </div>
+          <div class="certificate-card__info">
+            <h4>Consectetur Adipiscing Elit</h4>
+            <p class="certificate-card__issuer">Universitas Dolor Amet</p>
+            <span class="certificate-card__year">2014</span>
+          </div>
+          <button class="certificate-card__expand" aria-label="Ver certificado" onclick="openCertificate(this)">
+            &#128269; Ver completo
+          </button>
+        </div>
+
+        <!-- Certificado 3 -->
+        <div class="certificate-card fade-in">
+          <div class="certificate-card__image">
+            <div class="certificate-placeholder">
+              <span class="cert-icon">&#128220;</span>
+              <span class="cert-text">Certificado</span>
+            </div>
+          </div>
+          <div class="certificate-card__info">
+            <h4>Sed Do Eiusmod Tempor</h4>
+            <p class="certificate-card__issuer">Institutum Incididunt</p>
+            <span class="certificate-card__year">2017</span>
+          </div>
+          <button class="certificate-card__expand" aria-label="Ver certificado" onclick="openCertificate(this)">
+            &#128269; Ver completo
+          </button>
+        </div>
+
+        <!-- Certificado 4 -->
+        <div class="certificate-card fade-in">
+          <div class="certificate-card__image">
+            <div class="certificate-placeholder">
+              <span class="cert-icon">&#128220;</span>
+              <span class="cert-text">Certificado</span>
+            </div>
+          </div>
+          <div class="certificate-card__info">
+            <h4>Ut Labore Et Dolore Magna</h4>
+            <p class="certificate-card__issuer">Institutum Aliqua</p>
+            <span class="certificate-card__year">2020</span>
+          </div>
+          <button class="certificate-card__expand" aria-label="Ver certificado" onclick="openCertificate(this)">
+            &#128269; Ver completo
+          </button>
+        </div>
+
+        <!-- Certificado 5 -->
+        <div class="certificate-card fade-in">
+          <div class="certificate-card__image">
+            <div class="certificate-placeholder">
+              <span class="cert-icon">&#128220;</span>
+              <span class="cert-text">Certificado</span>
+            </div>
+          </div>
+          <div class="certificate-card__info">
+            <h4>Quis Nostrud Exercitation</h4>
+            <p class="certificate-card__issuer">Universitas Ullamco</p>
+            <span class="certificate-card__year">2023</span>
+          </div>
+          <button class="certificate-card__expand" aria-label="Ver certificado" onclick="openCertificate(this)">
+            &#128269; Ver completo
+          </button>
+        </div>
+
+        <!-- Certificado 6 -->
+        <div class="certificate-card fade-in">
+          <div class="certificate-card__image">
+            <div class="certificate-placeholder">
+              <span class="cert-icon">&#128220;</span>
+              <span class="cert-text">Certificado</span>
+            </div>
+          </div>
+          <div class="certificate-card__info">
+            <h4>Voluptate Velit Esse Cillum</h4>
+            <p class="certificate-card__issuer">Institutum Fugiat</p>
+            <span class="certificate-card__year">2012</span>
+          </div>
+          <button class="certificate-card__expand" aria-label="Ver certificado" onclick="openCertificate(this)">
+            &#128269; Ver completo
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal para ver certificado ampliado -->
+  <div class="certificate-modal" id="certificate-modal">
+    <div class="certificate-modal__content">
+      <button class="certificate-modal__close" id="cert-modal-close" aria-label="Cerrar">&times;</button>
+      <div class="certificate-modal__image" id="cert-modal-image">
+        <div class="certificate-placeholder certificate-placeholder--large">
+          <span class="cert-icon">&#128220;</span>
+          <span class="cert-text">Vista previa del certificado</span>
+        </div>
+      </div>
+      <div class="certificate-modal__info">
+        <h3 id="cert-modal-title">Nombre del certificado</h3>
+        <p id="cert-modal-issuer">Institución</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- PLANES / SERVICIOS -->
+  <!-- ============================================ -->
+  <section class="plans" id="planes">
+    <div class="plans__content">
+      <h2 class="section-title">Planes y Servicios</h2>
+      <p class="section-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+
+      <div class="plans__grid">
+        <!-- Plan Individual -->
+        <div class="plan-card fade-in" data-plan="individual">
+          <div class="plan-card__icon">&#128172;</div>
+          <h3 class="plan-card__title">Consulta Individual</h3>
+          <p class="plan-card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p>
+          <div class="plan-card__price">
+            <span class="price-amount"><span class="currency">$</span>800</span>
+            <span class="price-period">/ sesión</span>
+          </div>
+          <ul class="plan-card__features">
+            <li><span class="feature-icon">&#10003;</span> Lorem ipsum dolor</li>
+            <li><span class="feature-icon">&#10003;</span> Sit amet consectetur</li>
+            <li><span class="feature-icon">&#10003;</span> Adipiscing elit sed</li>
+            <li><span class="feature-icon">&#10003;</span> Eiusmod tempor</li>
+          </ul>
+          <button class="btn-secondary plan-card__btn" onclick="selectPlan('individual', 'Consulta Individual', 800)">Seleccionar Plan</button>
+        </div>
+
+        <!-- Plan Pack (Featured) -->
+        <div class="plan-card plan-card--featured fade-in" data-plan="pack">
+          <div class="plan-card__badge">Más Popular</div>
+          <div class="plan-card__icon">&#11088;</div>
+          <h3 class="plan-card__title">Pack 4 Sesiones</h3>
+          <p class="plan-card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut labore et dolore.</p>
+          <div class="plan-card__price">
+            <span class="price-amount"><span class="currency">$</span>2,800</span>
+            <span class="price-period">/ 4 sesiones</span>
+          </div>
+          <ul class="plan-card__features">
+            <li><span class="feature-icon">&#10003;</span> Lorem ipsum dolor sit</li>
+            <li><span class="feature-icon">&#10003;</span> Amet consectetur</li>
+            <li><span class="feature-icon">&#10003;</span> Adipiscing elit</li>
+            <li><span class="feature-icon">&#10003;</span> Sed do eiusmod</li>
+          </ul>
+          <button class="btn-primary plan-card__btn" onclick="selectPlan('pack', 'Pack 4 Sesiones', 2800)">Seleccionar Plan</button>
+        </div>
+
+        <!-- Plan Pareja -->
+        <div class="plan-card fade-in" data-plan="pareja">
+          <div class="plan-card__icon">&#128149;</div>
+          <h3 class="plan-card__title">Terapia de Pareja</h3>
+          <p class="plan-card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit quis nostrud exercitation.</p>
+          <div class="plan-card__price">
+            <span class="price-amount"><span class="currency">$</span>1,200</span>
+            <span class="price-period">/ sesión</span>
+          </div>
+          <ul class="plan-card__features">
+            <li><span class="feature-icon">&#10003;</span> Lorem ipsum dolor</li>
+            <li><span class="feature-icon">&#10003;</span> Sit amet consectetur</li>
+            <li><span class="feature-icon">&#10003;</span> Adipiscing elit sed</li>
+            <li><span class="feature-icon">&#10003;</span> Tempor incididunt</li>
+          </ul>
+          <button class="btn-secondary plan-card__btn" onclick="selectPlan('pareja', 'Terapia de Pareja', 1200)">Seleccionar Plan</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- AGENDAR CITA -->
+  <!-- ============================================ -->
+  <section class="booking" id="agendar">
+    <div class="booking__content">
+      <h2 class="section-title">Agenda tu Cita</h2>
+      <p class="section-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+
+      <div class="booking__grid">
+        <!-- Calendario -->
+        <div class="calendar fade-in">
+          <div class="calendar__header">
+            <button class="calendar__nav-btn" id="prev-month" aria-label="Mes anterior">&#8249;</button>
+            <h3 id="calendar-month-year"></h3>
+            <button class="calendar__nav-btn" id="next-month" aria-label="Mes siguiente">&#8250;</button>
+          </div>
+
+          <div class="calendar__weekdays">
+            <span>Dom</span>
+            <span>Lun</span>
+            <span>Mar</span>
+            <span>Mié</span>
+            <span>Jue</span>
+            <span>Vie</span>
+            <span>Sáb</span>
+          </div>
+
+          <div class="calendar__days" id="calendar-days"></div>
+
+          <!-- Horarios -->
+          <div class="timeslots" id="timeslots">
+            <h4>Horarios disponibles para el <span id="selected-date-text"></span></h4>
+            <div class="timeslots__grid" id="timeslots-grid"></div>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <form class="booking__form fade-in" id="booking-form">
+          <h3>Datos de la Cita</h3>
+
+          <div class="form-group">
+            <label for="plan-select">Plan seleccionado</label>
+            <select id="plan-select" required>
+              <option value="">Selecciona un plan</option>
+              <option value="individual">Consulta Individual - $800</option>
+              <option value="pack">Pack 4 Sesiones - $2,800</option>
+              <option value="pareja">Terapia de Pareja - $1,200</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="patient-name">Nombre completo</label>
+            <input type="text" id="patient-name" placeholder="Tu nombre completo" required>
+          </div>
+
+          <div class="form-group">
+            <label for="patient-email">Correo electrónico</label>
+            <input type="email" id="patient-email" placeholder="tu@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="patient-phone">Teléfono</label>
+            <input type="tel" id="patient-phone" placeholder="+56 9 6290 4727" required>
+          </div>
+
+          <div class="form-group">
+            <label for="patient-reason">Motivo de consulta</label>
+            <textarea id="patient-reason" placeholder="Lorem ipsum dolor sit amet..." required></textarea>
+          </div>
+
+          <!-- Resumen -->
+          <div class="booking__summary" id="booking-summary">
+            <h4>Resumen de tu Cita</h4>
+            <div class="summary-item">
+              <span class="summary-label">Plan:</span>
+              <span class="summary-value" id="summary-plan">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Fecha:</span>
+              <span class="summary-value" id="summary-date">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Hora:</span>
+              <span class="summary-value" id="summary-time">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total:</span>
+              <span class="summary-value" id="summary-total">-</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary booking__submit" id="booking-submit" disabled>
+            Proceder al Pago
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- MODAL DE PAGO SIMULADO -->
+  <!-- ============================================ -->
+  <div class="payment-modal" id="payment-modal">
+    <div class="payment">
+      <button class="payment__close" id="payment-close" aria-label="Cerrar">&times;</button>
+
+      <!-- Formulario de pago -->
+      <div id="payment-form-section">
+        <div class="payment__header">
+          <h3>Confirmar Pago</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+        </div>
+
+        <div class="payment__summary">
+          <div class="payment-summary-row">
+            <span class="label">Plan</span>
+            <span class="value" id="pay-plan">-</span>
+          </div>
+          <div class="payment-summary-row">
+            <span class="label">Fecha</span>
+            <span class="value" id="pay-date">-</span>
+          </div>
+          <div class="payment-summary-row">
+            <span class="label">Hora</span>
+            <span class="value" id="pay-time">-</span>
+          </div>
+          <div class="payment-summary-row total">
+            <span class="label">Total</span>
+            <span class="value" id="pay-total">-</span>
+          </div>
+        </div>
+
+        <form class="payment__form" id="payment-form">
+          <div class="payment__card-visual">
+            <div class="card-chip"></div>
+            <div class="card-number" id="card-display">**** **** **** ****</div>
+            <div class="card-bottom">
+              <span class="card-name" id="card-name-display">TU NOMBRE</span>
+              <span class="card-expiry" id="card-expiry-display">MM/AA</span>
+            </div>
+          </div>
+
+          <div class="payment__card-inputs">
+            <div class="form-group">
+              <label for="card-number">Número de tarjeta</label>
+              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+            </div>
+
+            <div class="form-group">
+              <label for="card-name">Nombre en la tarjeta</label>
+              <input type="text" id="card-name" placeholder="NOMBRE COMPLETO" required>
+            </div>
+
+            <div class="card-row">
+              <div class="form-group">
+                <label for="card-expiry">Fecha de vencimiento</label>
+                <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" required>
+              </div>
+              <div class="form-group">
+                <label for="card-cvv">CVV</label>
+                <input type="text" id="card-cvv" placeholder="123" maxlength="4" required>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary payment__btn">
+            <span class="btn-lock">&#128274;</span> Pagar Ahora
+          </button>
+        </form>
+      </div>
+
+      <!-- Confirmación exitosa -->
+      <div class="payment__success" id="payment-success">
+        <div class="success-icon">&#10003;</div>
+        <h3>Pago Confirmado</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+        <button class="btn-primary" onclick="closePaymentModal()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- FOOTER -->
+  <!-- ============================================ -->
+  <footer class="footer" id="contacto">
+    <div class="footer__content">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <div class="logo-icon">P</div>
+            <span class="logo-text">Dr. Ariel</span>
+          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+
+        <div class="footer__section">
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#sobre-mi">Sobre Mí</a></li>
+            <li><a href="#planes">Planes</a></li>
+            <li><a href="#agendar">Agendar Cita</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__section">
+          <h4>Contacto</h4>
+          <ul>
+            <li>&#128222; +56 9 6290 4727</li>
+            <li>&#128231; lorem@ipsum.com</li>
+            <li>&#128205; Lorem Ipsum 123, Dolor Sit</li>
+            <li>&#127961; Amet, Consectetur</li>
+          </ul>
+        </div>
+
+        <div class="footer__section">
+          <h4>Horario</h4>
+          <ul>
+            <li>Lunes a Viernes</li>
+            <li>9:00 AM - 7:00 PM</li>
+            <li>Sábados</li>
+            <li>10:00 AM - 2:00 PM</li>
+          </ul>
+          <div class="footer__social">
+            <a href="#" class="social-link" aria-label="Facebook">f</a>
+            <a href="#" class="social-link" aria-label="Instagram">in</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">Li</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; 2026 Dr. Ariel. Todos los derechos reservados.</p>
+        <p>Lorem Ipsum: 12345678</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

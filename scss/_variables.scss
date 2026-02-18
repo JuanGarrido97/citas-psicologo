@@ -1,0 +1,74 @@
+// ============================================
+// VARIABLES
+// ============================================
+
+// Paleta de colores - Tonos calmantes
+$color-primary: #7C9A82;       // Verde salvia
+$color-primary-dark: #5C7A62;  // Verde salvia oscuro
+$color-primary-light: #A8C5AE; // Verde salvia claro
+$color-secondary: #D4C5A9;     // Beige cálido
+$color-secondary-light: #EDE6D6; // Beige claro
+$color-accent: #E8B86D;        // Dorado suave
+$color-dark: #2D3436;          // Gris oscuro
+$color-text: #4A4A4A;          // Texto principal
+$color-text-light: #7F8C8D;    // Texto secundario
+$color-white: #FFFFFF;
+$color-bg: #FAFAF8;            // Fondo general
+$color-bg-alt: #F5F1EB;        // Fondo alternativo
+$color-danger: #E74C3C;
+$color-success: #27AE60;
+
+// Tipografía
+$font-heading: 'Poppins', sans-serif;
+$font-body: 'Inter', sans-serif;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-md: 1.125rem;
+$font-size-lg: 1.25rem;
+$font-size-xl: 1.5rem;
+$font-size-2xl: 2rem;
+$font-size-3xl: 2.5rem;
+$font-size-4xl: 3rem;
+
+// Espaciado
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 3rem;
+$spacing-3xl: 4rem;
+$spacing-4xl: 6rem;
+
+// Bordes
+$border-radius-sm: 0.375rem;
+$border-radius: 0.5rem;
+$border-radius-lg: 0.75rem;
+$border-radius-xl: 1rem;
+$border-radius-full: 50%;
+
+// Sombras
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+$shadow-md: 0 6px 15px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+// Transiciones
+$transition-fast: 0.2s ease;
+$transition: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Contenedor
+$container-max: 1200px;
+$container-padding: $spacing-lg;
+
+// Header
+$header-height: 70px;

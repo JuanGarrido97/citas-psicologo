@@ -1,0 +1,150 @@
+// ============================================
+// PLANES / SERVICIOS
+// ============================================
+
+.plans {
+  @include section-padding;
+  background: $color-bg-alt;
+}
+
+.plans__content {
+  @include container;
+}
+
+.plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-xl;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+}
+
+.plan-card {
+  @include card;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &--featured {
+    border: 2px solid $color-primary;
+    transform: scale(1.05);
+
+    @include mobile {
+      transform: scale(1);
+    }
+
+    &:hover {
+      transform: scale(1.05) translateY(-4px);
+
+      @include mobile {
+        transform: translateY(-4px);
+      }
+    }
+  }
+}
+
+.plan-card__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: $color-primary;
+  color: $color-white;
+  padding: $spacing-sm;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  font-family: $font-heading;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.plan-card__icon {
+  width: 70px;
+  height: 70px;
+  background: rgba($color-primary, 0.1);
+  border-radius: $border-radius-full;
+  @include flex-center;
+  margin: 0 auto $spacing-lg;
+  font-size: $font-size-2xl;
+
+  .plan-card--featured & {
+    background: rgba($color-primary, 0.15);
+    margin-top: $spacing-xl;
+  }
+}
+
+.plan-card__title {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  margin-bottom: $spacing-sm;
+}
+
+.plan-card__description {
+  color: $color-text-light;
+  font-size: $font-size-sm;
+  margin-bottom: $spacing-lg;
+  line-height: 1.6;
+}
+
+.plan-card__price {
+  margin-bottom: $spacing-lg;
+
+  .price-amount {
+    font-family: $font-heading;
+    font-size: $font-size-3xl;
+    font-weight: 800;
+    color: $color-dark;
+
+    .currency {
+      font-size: $font-size-lg;
+      vertical-align: super;
+    }
+  }
+
+  .price-period {
+    color: $color-text-light;
+    font-size: $font-size-sm;
+  }
+}
+
+.plan-card__features {
+  margin-bottom: $spacing-xl;
+  text-align: left;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm 0;
+    font-size: $font-size-sm;
+    color: $color-text;
+
+    .feature-icon {
+      color: $color-success;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.plan-card__btn {
+  width: 100%;
+
+  .plan-card--featured & {
+    background-color: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+  }
+}

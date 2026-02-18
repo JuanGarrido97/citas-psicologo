@@ -1,0 +1,199 @@
+// ============================================
+// PAGO SIMULADO
+// ============================================
+
+.payment-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  @include flex-center;
+  display: none;
+  padding: $spacing-lg;
+
+  &.active {
+    display: flex;
+  }
+}
+
+.payment {
+  background: $color-white;
+  border-radius: $border-radius-xl;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: $shadow-lg;
+  position: relative;
+}
+
+.payment__close {
+  position: absolute;
+  top: $spacing-lg;
+  right: $spacing-lg;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: $color-bg;
+  border-radius: $border-radius-full;
+  @include flex-center;
+  cursor: pointer;
+  font-size: $font-size-lg;
+  color: $color-text-light;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: darken($color-bg, 5%);
+    color: $color-dark;
+  }
+}
+
+.payment__header {
+  padding: $spacing-2xl $spacing-2xl $spacing-lg;
+  border-bottom: 1px solid darken($color-bg, 5%);
+
+  h3 {
+    font-size: $font-size-xl;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: $color-text-light;
+    font-size: $font-size-sm;
+  }
+}
+
+.payment__summary {
+  padding: $spacing-lg $spacing-2xl;
+  background: $color-bg;
+
+  .payment-summary-row {
+    @include flex-between;
+    padding: $spacing-sm 0;
+    font-size: $font-size-sm;
+
+    .label {
+      color: $color-text-light;
+    }
+
+    .value {
+      font-weight: 600;
+      color: $color-dark;
+    }
+
+    &.total {
+      border-top: 2px solid darken($color-bg, 8%);
+      margin-top: $spacing-sm;
+      padding-top: $spacing-md;
+
+      .label,
+      .value {
+        font-size: $font-size-lg;
+        font-weight: 700;
+        color: $color-dark;
+      }
+    }
+  }
+}
+
+.payment__form {
+  padding: $spacing-2xl;
+  @include flex-column;
+  gap: $spacing-lg;
+}
+
+.payment__card-visual {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, $color-dark 0%, lighten($color-dark, 15%) 100%);
+  border-radius: $border-radius-lg;
+  padding: $spacing-xl;
+  @include flex-column;
+  justify-content: space-between;
+  color: $color-white;
+  margin-bottom: $spacing-md;
+
+  .card-chip {
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(135deg, $color-accent, darken($color-accent, 15%));
+    border-radius: $border-radius-sm;
+  }
+
+  .card-number {
+    font-family: monospace;
+    font-size: $font-size-lg;
+    letter-spacing: 3px;
+
+    @include mobile {
+      font-size: $font-size-base;
+    }
+  }
+
+  .card-bottom {
+    @include flex-between;
+    font-size: $font-size-sm;
+
+    .card-name {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.payment__card-inputs {
+  @include flex-column;
+  gap: $spacing-md;
+
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+}
+
+.payment__btn {
+  width: 100%;
+  padding: $spacing-lg;
+  font-size: $font-size-md;
+
+  .btn-lock {
+    font-size: $font-size-base;
+  }
+}
+
+// Confirmación exitosa
+.payment__success {
+  padding: $spacing-3xl $spacing-2xl;
+  text-align: center;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba($color-success, 0.1);
+    border-radius: $border-radius-full;
+    @include flex-center;
+    margin: 0 auto $spacing-xl;
+    font-size: $font-size-3xl;
+    color: $color-success;
+  }
+
+  h3 {
+    font-size: $font-size-xl;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: $color-text-light;
+    margin-bottom: $spacing-xl;
+    line-height: 1.6;
+  }
+}

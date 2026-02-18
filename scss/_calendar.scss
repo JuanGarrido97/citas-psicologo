@@ -1,0 +1,282 @@
+// ============================================
+// CALENDARIO / AGENDAR CITA
+// ============================================
+
+.booking {
+  @include section-padding;
+  background: $color-white;
+}
+
+.booking__content {
+  @include container;
+}
+
+.booking__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-2xl;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Calendario
+.calendar {
+  @include card;
+}
+
+.calendar__header {
+  @include flex-between;
+  margin-bottom: $spacing-lg;
+
+  h3 {
+    font-size: $font-size-lg;
+    font-weight: 700;
+  }
+}
+
+.calendar__nav-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+  border-radius: $border-radius-full;
+  @include flex-center;
+  cursor: pointer;
+  transition: all $transition-fast;
+  font-size: $font-size-md;
+
+  &:hover {
+    background: $color-primary;
+    color: $color-white;
+  }
+}
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: $spacing-sm;
+
+  span {
+    text-align: center;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    color: $color-text-light;
+    padding: $spacing-sm 0;
+    font-family: $font-heading;
+    text-transform: uppercase;
+  }
+}
+
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar__day {
+  aspect-ratio: 1;
+  @include flex-center;
+  border: none;
+  background: none;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-text;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(.calendar__day--disabled):not(.calendar__day--empty) {
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+  }
+
+  &--today {
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+    font-weight: 700;
+  }
+
+  &--selected {
+    background: $color-primary !important;
+    color: $color-white !important;
+    font-weight: 700;
+  }
+
+  &--disabled {
+    color: darken($color-bg, 15%);
+    cursor: not-allowed;
+  }
+
+  &--empty {
+    cursor: default;
+  }
+}
+
+// Horarios
+.timeslots {
+  margin-top: $spacing-lg;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+
+  h4 {
+    font-size: $font-size-base;
+    margin-bottom: $spacing-md;
+    color: $color-dark;
+  }
+}
+
+.timeslots__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+
+  @include mobile {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.timeslot {
+  padding: $spacing-sm $spacing-md;
+  border: 2px solid darken($color-bg, 8%);
+  border-radius: $border-radius;
+  background: none;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-text;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-align: center;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+
+  &--selected {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background: $color-primary-dark;
+      color: $color-white;
+    }
+  }
+
+  &--unavailable {
+    color: darken($color-bg, 20%);
+    border-color: darken($color-bg, 5%);
+    cursor: not-allowed;
+    text-decoration: line-through;
+
+    &:hover {
+      border-color: darken($color-bg, 5%);
+      color: darken($color-bg, 20%);
+    }
+  }
+}
+
+// Formulario de reserva
+.booking__form {
+  @include card;
+  @include flex-column;
+  gap: $spacing-lg;
+
+  h3 {
+    font-size: $font-size-xl;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.form-group {
+  @include flex-column;
+  gap: $spacing-xs;
+
+  label {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-dark;
+    font-family: $font-heading;
+  }
+
+  input,
+  select,
+  textarea {
+    padding: $spacing-md;
+    border: 2px solid darken($color-bg, 8%);
+    border-radius: $border-radius;
+    font-size: $font-size-base;
+    color: $color-text;
+    background: $color-bg;
+    transition: border-color $transition-fast;
+    outline: none;
+
+    &:focus {
+      border-color: $color-primary;
+      background: $color-white;
+    }
+
+    &::placeholder {
+      color: lighten($color-text-light, 15%);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237F8C8D' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+}
+
+.booking__summary {
+  background: $color-bg-alt;
+  border-radius: $border-radius;
+  padding: $spacing-lg;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+
+  h4 {
+    font-size: $font-size-base;
+    margin-bottom: $spacing-md;
+  }
+
+  .summary-item {
+    @include flex-between;
+    padding: $spacing-xs 0;
+    font-size: $font-size-sm;
+
+    .summary-label {
+      color: $color-text-light;
+    }
+
+    .summary-value {
+      font-weight: 600;
+      color: $color-dark;
+    }
+  }
+}
+
+.booking__submit {
+  width: 100%;
+  margin-top: $spacing-md;
+}
