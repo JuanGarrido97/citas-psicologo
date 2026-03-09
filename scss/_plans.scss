@@ -11,102 +11,95 @@
   @include container;
 }
 
-.plans__grid {
+// Layout principal: descripción + tarjeta precio
+.plans__layout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-xl;
-  max-width: 1000px;
-  margin: 0 auto;
-
-  @include tablet {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-3xl;
+  align-items: center;
+  max-width: 960px;
+  margin: 0 auto $spacing-3xl;
 
   @include mobile {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    gap: $spacing-2xl;
   }
 }
 
-.plan-card {
+// Columna de descripción
+.plans__description {
+  @include flex-column;
+  gap: $spacing-lg;
+
+  p {
+    color: $color-text;
+    line-height: 1.8;
+    font-size: $font-size-base;
+  }
+}
+
+.plans__note {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  background: rgba($color-primary, 0.08);
+  border-left: 4px solid $color-primary;
+  border-radius: 0 $border-radius $border-radius 0;
+  padding: $spacing-md $spacing-lg;
+  margin-top: $spacing-sm;
+
+  .plans__note-icon {
+    font-size: $font-size-lg;
+    flex-shrink: 0;
+  }
+
+  p {
+    color: $color-text;
+    font-size: $font-size-sm;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// Tarjeta de precio
+.price-card {
   @include card;
   text-align: center;
+  border: 2px solid $color-primary;
   position: relative;
   overflow: hidden;
 
-  &--featured {
-    border: 2px solid $color-primary;
-    transform: scale(1.05);
-
-    @include mobile {
-      transform: scale(1);
-    }
-
-    &:hover {
-      transform: scale(1.05) translateY(-4px);
-
-      @include mobile {
-        transform: translateY(-4px);
-      }
-    }
+  &__badge {
+    background: $color-primary;
+    color: $color-white;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    font-family: $font-heading;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: #{-$spacing-xl} #{-$spacing-xl} $spacing-xl;
+    display: block;
   }
-}
 
-.plan-card__badge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: $color-primary;
-  color: $color-white;
-  padding: $spacing-sm;
-  font-size: $font-size-xs;
-  font-weight: 700;
-  font-family: $font-heading;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.plan-card__icon {
-  width: 70px;
-  height: 70px;
-  background: rgba($color-primary, 0.1);
-  border-radius: $border-radius-full;
-  @include flex-center;
-  margin: 0 auto $spacing-lg;
-  font-size: $font-size-2xl;
-
-  .plan-card--featured & {
-    background: rgba($color-primary, 0.15);
-    margin-top: $spacing-xl;
+  &__icon {
+    font-size: $font-size-3xl;
+    margin-bottom: $spacing-md;
+    display: block;
   }
-}
 
-.plan-card__title {
-  font-size: $font-size-xl;
-  font-weight: 700;
-  margin-bottom: $spacing-sm;
-}
+  h3 {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    margin-bottom: $spacing-lg;
+  }
 
-.plan-card__description {
-  color: $color-text-light;
-  font-size: $font-size-sm;
-  margin-bottom: $spacing-lg;
-  line-height: 1.6;
-}
-
-.plan-card__price {
-  margin-bottom: $spacing-lg;
-
-  .price-amount {
+  &__amount {
     font-family: $font-heading;
     font-size: $font-size-3xl;
     font-weight: 800;
     color: $color-dark;
-
-    &--text {
-      font-size: $font-size-xl;
-    }
+    margin-bottom: $spacing-lg;
 
     .currency {
       font-size: $font-size-lg;
@@ -114,41 +107,136 @@
     }
   }
 
-  .price-period {
+  &__period {
+    display: block;
     color: $color-text-light;
     font-size: $font-size-sm;
+    font-weight: 400;
+    margin-top: $spacing-xs;
   }
-}
 
-.plan-card__features {
-  margin-bottom: $spacing-xl;
-  text-align: left;
+  &__features {
+    text-align: left;
+    margin-bottom: $spacing-xl;
 
-  li {
-    display: flex;
-    align-items: center;
-    gap: $spacing-sm;
-    padding: $spacing-sm 0;
-    font-size: $font-size-sm;
-    color: $color-text;
+    li {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      padding: $spacing-sm 0;
+      font-size: $font-size-sm;
+      color: $color-text;
+      border-bottom: 1px solid darken($color-bg, 4%);
 
-    .feature-icon {
-      color: $color-success;
-      font-weight: 700;
-      flex-shrink: 0;
+      &:last-child {
+        border-bottom: none;
+      }
+
+      span {
+        color: $color-success;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
     }
   }
+
+  &__btn {
+    width: 100%;
+  }
 }
 
-.plan-card__btn {
-  width: 100%;
+// Bloque "Agenda tu sesión"
+.plans__agenda {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: $spacing-3xl;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-top: $spacing-3xl;
+  border-top: 1px solid darken($color-bg, 6%);
+  align-items: start;
 
-  .plan-card--featured & {
-    background-color: $color-primary;
-    color: $color-white;
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-2xl;
+  }
+}
+
+.plans__agenda-text {
+  @include flex-column;
+  gap: $spacing-lg;
+
+  h3 {
+    font-size: $font-size-2xl;
+    font-weight: 700;
+    color: $color-dark;
+  }
+
+  p {
+    color: $color-text-light;
+    line-height: 1.8;
+    font-size: $font-size-base;
+  }
+}
+
+.plans__agenda-contact {
+  background: $color-white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-xl;
+  box-shadow: $shadow;
+  @include flex-column;
+  gap: $spacing-lg;
+
+  h4 {
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $color-dark;
+    padding-bottom: $spacing-md;
+    border-bottom: 2px solid $color-primary;
+  }
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+
+  &__icon {
+    font-size: $font-size-xl;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  div {
+    @include flex-column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: $font-size-xs;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: $color-text-light;
+    font-family: $font-heading;
+  }
+
+  a {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-primary;
+    word-break: break-all;
 
     &:hover {
-      background-color: $color-primary-dark;
+      color: $color-primary-dark;
+      text-decoration: underline;
     }
   }
+}
+
+.plans__agenda-reply {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+  font-style: italic;
+  margin: 0;
 }

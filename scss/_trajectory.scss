@@ -1,0 +1,86 @@
+// ============================================
+// FORMACIÓN Y TRAYECTORIA
+// ============================================
+
+.trajectory {
+  @include section-padding;
+  background: $color-white;
+}
+
+.trajectory__content {
+  @include container;
+}
+
+.trajectory__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-xl;
+  max-width: 960px;
+  margin: 0 auto;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.trajectory__item {
+  display: flex;
+  gap: $spacing-lg;
+  padding: $spacing-xl;
+  background: $color-bg;
+  border-radius: $border-radius-lg;
+  border-left: 4px solid $color-primary;
+  transition: all $transition;
+
+  &:hover {
+    background: $color-white;
+    box-shadow: $shadow-md;
+    transform: translateY(-3px);
+  }
+
+  // El último item (impar) ocupa todo el ancho
+  &:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 600px;
+    justify-self: center;
+    width: 100%;
+
+    @include mobile {
+      grid-column: auto;
+      max-width: 100%;
+      justify-self: auto;
+    }
+  }
+}
+
+.trajectory__icon {
+  font-size: $font-size-2xl;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  background: rgba($color-primary, 0.1);
+  border-radius: $border-radius-full;
+  @include flex-center;
+}
+
+.trajectory__text {
+  @include flex-column;
+  gap: $spacing-sm;
+
+  h4 {
+    font-size: $font-size-base;
+    font-weight: 700;
+    color: $color-dark;
+  }
+
+  p {
+    font-size: $font-size-sm;
+    color: $color-text-light;
+    line-height: 1.7;
+
+    em {
+      font-style: italic;
+      color: $color-text;
+    }
+  }
+}

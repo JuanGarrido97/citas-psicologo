@@ -22,10 +22,10 @@
       <nav class="header__nav" id="nav">
         <a href="#inicio" class="header__nav-link active">Inicio</a>
         <a href="#sobre-mi" class="header__nav-link">Sobre Mí</a>
+        <a href="#trayectoria" class="header__nav-link">Trayectoria</a>
         <a href="#planes" class="header__nav-link">Planes</a>
         <a href="#agendar" class="header__nav-link">Agendar Cita</a>
         <a href="#contacto" class="header__nav-link">Contacto</a>
-        <a href="#agendar" class="header__cta">Agendar Cita</a>
       </nav>
 
       <button class="header__hamburger" id="hamburger" aria-label="Abrir menú">
@@ -122,6 +122,60 @@
   </section>
 
   <!-- ============================================ -->
+  <!-- FORMACIÓN Y TRAYECTORIA -->
+  <!-- ============================================ -->
+  <section class="trajectory" id="trayectoria">
+    <div class="trajectory__content">
+      <h2 class="section-title">Formación y Trayectoria</h2>
+      <p class="section-subtitle">Una práctica construida desde la experiencia clínica, la formación continua y el compromiso con las personas</p>
+
+      <div class="trajectory__grid">
+
+        <div class="trajectory__item fade-in">
+          <div class="trajectory__icon">&#127979;</div>
+          <div class="trajectory__text">
+            <h4>Titulación</h4>
+            <p>Psicólogo titulado por la Universidad Academia de Humanismo Cristiano (2016).</p>
+          </div>
+        </div>
+
+        <div class="trajectory__item fade-in">
+          <div class="trajectory__icon">&#128218;</div>
+          <div class="trajectory__text">
+            <h4>Enfoque Postracionalista</h4>
+            <p>Formación clínica en enfoque postracionalista, incluyendo participación en el Seminario Internacional <em>"Articulación metódica de la Psicoterapia Fenomenológica: una aproximación postracionalista"</em>, dictado por el Dr. Giampiero Arciero (2014).</p>
+          </div>
+        </div>
+
+        <div class="trajectory__item fade-in">
+          <div class="trajectory__icon">&#128104;&#8205;&#9877;</div>
+          <div class="trajectory__text">
+            <h4>Experiencia Clínica</h4>
+            <p>12 años de experiencia en atención psicoterapéutica con población adulta e infanto-juvenil, desarrollando mi práctica tanto en el ámbito clínico universitario (CAPS) como en Atención Primaria de Salud y programas municipales de reinserción social y prevención de la violencia.</p>
+          </div>
+        </div>
+
+        <div class="trajectory__item fade-in">
+          <div class="trajectory__icon">&#128196;</div>
+          <div class="trajectory__text">
+            <h4>Formación Complementaria</h4>
+            <p>He complementado mi ejercicio profesional con formación en trauma infantil, abuso sexual, intervención en consumo problemático, peritaje psicológico y trabajo con familias, integrando además una mirada comunitaria y territorial a través de diplomados en migración y seguridad ciudadana.</p>
+          </div>
+        </div>
+
+        <div class="trajectory__item fade-in">
+          <div class="trajectory__icon">&#129309;</div>
+          <div class="trajectory__text">
+            <h4>Alta Complejidad Social</h4>
+            <p>Mi experiencia incluye coordinación de equipos multidisciplinarios y trabajo en contextos de alta complejidad social, lo que enriquece mi comprensión clínica del sufrimiento humano y los distintos procesos de cambio.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
   <!-- CÓMO TRABAJO -->
   <!-- ============================================ -->
   <section class="certificates" id="como-trabajo">
@@ -189,62 +243,71 @@
       <h2 class="section-title">Arancel y Modalidad</h2>
       <p class="section-subtitle">Psicoterapia online individual con encuadre clínico y confidencialidad</p>
 
-      <div class="plans__grid">
-        <!-- Sesión Individual -->
-        <div class="plan-card plan-card--featured fade-in" data-plan="individual">
-          <div class="plan-card__badge">Sesión Online</div>
-          <div class="plan-card__icon">&#128172;</div>
-          <h3 class="plan-card__title">Sesión Individual</h3>
-          <p class="plan-card__description">Un espacio terapéutico desde la comodidad y privacidad de tu propio entorno.</p>
-          <div class="plan-card__price">
-            <span class="price-amount"><span class="currency">$</span>30.000</span>
-            <span class="price-period">CLP / sesión</span>
+      <div class="plans__layout">
+
+        <!-- Columna izquierda: descripción -->
+        <div class="plans__description fade-in">
+          <p>Las sesiones de psicoterapia se realizan en modalidad <strong>online</strong>, a través de plataforma segura y previamente coordinada.</p>
+          <p>Cada encuentro tiene una duración aproximada de <strong>50 minutos</strong>, respetando el encuadre y la confidencialidad que el proceso terapéutico requiere.</p>
+          <p>El valor refleja una práctica clínica sostenida por más de <strong>12 años de experiencia</strong>, formación especializada y un compromiso profundo con el cuidado del proceso terapéutico.</p>
+          <div class="plans__note">
+        
+            <p>Existen cupos limitados con <strong>arancel diferenciado</strong>, previa evaluación.</p>
           </div>
-          <ul class="plan-card__features">
-            <li><span class="feature-icon">&#10003;</span> Duración: 50 minutos</li>
-            <li><span class="feature-icon">&#10003;</span> Videollamada segura</li>
-            <li><span class="feature-icon">&#10003;</span> Frecuencia semanal</li>
-            <li><span class="feature-icon">&#10003;</span> Confidencialidad garantizada</li>
-          </ul>
-          <button class="btn-primary plan-card__btn" onclick="selectPlan('individual', 'Sesión Individual', 30000)">Agendar Sesión</button>
         </div>
 
-        <!-- Primera Sesión -->
-        <div class="plan-card fade-in" data-plan="primera">
-          <div class="plan-card__icon">&#128075;</div>
-          <h3 class="plan-card__title">Primera Sesión</h3>
-          <p class="plan-card__description">Espacio de encuentro inicial para comprender el motivo de consulta y evaluar juntos el camino terapéutico más adecuado.</p>
-          <div class="plan-card__price">
-            <span class="price-amount"><span class="currency">$</span>30.000</span>
-            <span class="price-period">CLP / sesión</span>
+        <!-- Columna derecha: tarjeta de precio -->
+        <div class="plans__price-card fade-in">
+          <div class="price-card">
+            <div class="price-card__badge">Sesión Online</div>
+            <div class="price-card__icon">&#128172;</div>
+            <h3>Sesión Individual</h3>
+            <div class="price-card__amount">
+              <span class="currency">$</span>30.000
+              <span class="price-card__period">CLP / sesión</span>
+            </div>
+            <ul class="price-card__features">
+              <li><span>&#10003;</span> Duración: 50 minutos</li>
+              <li><span>&#10003;</span> Videollamada segura</li>
+              <li><span>&#10003;</span> Frecuencia semanal</li>
+              <li><span>&#10003;</span> Confidencialidad garantizada</li>
+            </ul>
+            <button class="btn-primary price-card__btn" onclick="selectPlan('individual', 'Sesión Individual', 30000)">Agendar Sesión</button>
           </div>
-          <ul class="plan-card__features">
-            <li><span class="feature-icon">&#10003;</span> Evaluación inicial</li>
-            <li><span class="feature-icon">&#10003;</span> Sin preparación previa</li>
-            <li><span class="feature-icon">&#10003;</span> Orientación del proceso</li>
-            <li><span class="feature-icon">&#10003;</span> Sin compromisos previos</li>
-          </ul>
-          <button class="btn-secondary plan-card__btn" onclick="selectPlan('primera', 'Primera Sesión', 30000)">Comenzar Aquí</button>
         </div>
 
-        <!-- Arancel Diferenciado -->
-        <div class="plan-card fade-in" data-plan="diferenciado">
-          <div class="plan-card__icon">&#128140;</div>
-          <h3 class="plan-card__title">Arancel Diferenciado</h3>
-          <p class="plan-card__description">Existen cupos limitados con arancel diferenciado para quienes lo requieran, previa evaluación de cada caso.</p>
-          <div class="plan-card__price">
-            <span class="price-amount price-amount--text">Consultar</span>
-            <span class="price-period">previa evaluación</span>
+      </div>
+
+      <!-- Bloque "Agenda tu sesión" -->
+      <div class="plans__agenda fade-in">
+        <div class="plans__agenda-text">
+          <h3>Agenda tu sesión</h3>
+          <p>Iniciar un proceso terapéutico es una decisión significativa. A veces dar el primer paso es lo más difícil, pero también puede ser el comienzo de un cambio profundo.</p>
+          <p>Si sientes que este espacio puede acompañarte en tu momento actual, puedes escribirme para coordinar una primera sesión o realizar las consultas que necesites. El primer contacto tiene como objetivo orientarte y resolver dudas respecto al proceso, modalidad y encuadre.</p>
+          <p>Aquí encontrarás un espacio <strong>serio, confidencial y respetuoso</strong> de tu historia.</p>
+        </div>
+
+        <div class="plans__agenda-contact">
+          <h4>Contacto directo</h4>
+          <div class="contact-item">
+            <span class="contact-item__icon">&#128231;</span>
+            <div>
+              <span class="contact-item__label">Correo electrónico</span>
+              <a href="mailto:arielignaciocaceressaravia@gmail.com">arielignaciocaceressaravia@gmail.com</a>
+            </div>
           </div>
-          <ul class="plan-card__features">
-            <li><span class="feature-icon">&#10003;</span> Cupos limitados</li>
-            <li><span class="feature-icon">&#10003;</span> Evaluación individual</li>
-            <li><span class="feature-icon">&#10003;</span> Misma calidad de atención</li>
-            <li><span class="feature-icon">&#10003;</span> Contactar para consultar</li>
-          </ul>
-          <button class="btn-secondary plan-card__btn" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Consultar Disponibilidad</button>
+          <div class="contact-item">
+            <span class="contact-item__icon">&#128172;</span>
+            <div>
+              <span class="contact-item__label">WhatsApp</span>
+              <a href="https://wa.me/56962904727" target="_blank" rel="noopener">+56 9 6290 4727</a>
+            </div>
+          </div>
+          <p class="plans__agenda-reply">Responderé a la brevedad posible.</p>
+          <a href="#agendar" class="btn-primary">Agendar con Calendario</a>
         </div>
       </div>
+
     </div>
   </section>
 
