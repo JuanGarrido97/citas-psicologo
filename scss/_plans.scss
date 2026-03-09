@@ -104,6 +104,10 @@
     font-weight: 800;
     color: $color-dark;
 
+    &--text {
+      font-size: $font-size-xl;
+    }
+
     .currency {
       font-size: $font-size-lg;
       vertical-align: super;

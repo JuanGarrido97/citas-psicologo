@@ -1215,6 +1215,9 @@ input, textarea, select {
   font-weight: 800;
   color: #2D3436;
 }
+.plan-card__price .price-amount--text {
+  font-size: 1.5rem;
+}
 .plan-card__price .price-amount .currency {
   font-size: 1.25rem;
   vertical-align: super;
