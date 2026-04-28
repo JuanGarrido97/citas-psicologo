@@ -61,6 +61,85 @@
   }
 }
 
+// Carrusel de sesiones
+.carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  width: 100%;
+}
+
+.carousel__track-wrap {
+  width: 100%;
+  overflow: hidden;
+  border-radius: $border-radius-lg;
+}
+
+.carousel__track {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  .price-card {
+    min-width: 100%;
+    flex-shrink: 0;
+  }
+}
+
+.carousel__btn {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $color-white;
+  border: 2px solid $color-primary;
+  color: $color-primary;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: $shadow-md;
+  transition: all 0.2s;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: $color-primary;
+    color: $color-white;
+  }
+
+  &--prev { left: -20px; }
+  &--next { right: -20px; }
+
+  @include mobile {
+    &--prev { left: -12px; }
+    &--next { right: -12px; }
+  }
+}
+
+.carousel__dots {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba($color-primary, 0.25);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+
+  &--active {
+    background: $color-primary;
+    transform: scale(1.3);
+  }
+}
+
 // Tarjeta de precio
 .price-card {
   @include card;
@@ -92,6 +171,13 @@
     font-size: $font-size-xl;
     font-weight: 700;
     margin-bottom: $spacing-lg;
+  }
+
+  &__desc {
+    font-size: $font-size-sm;
+    color: $color-text-light;
+    margin-bottom: $spacing-lg;
+    line-height: 1.6;
   }
 
   &__amount {

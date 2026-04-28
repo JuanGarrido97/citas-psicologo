@@ -21,6 +21,7 @@ const bookingState = {
   selectedDate: null,
   selectedTime: null,
 };
+window.bookingState = bookingState;
 
 // Horarios disponibles (simulados)
 const availableSlots = [
@@ -142,7 +143,7 @@ function initCalendar() {
   renderCalendar();
 }
 
-function renderCalendar() {
+async function renderCalendar() {
   const monthNames = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
@@ -154,10 +155,20 @@ function renderCalendar() {
   const daysContainer = document.getElementById('calendar-days');
   daysContainer.innerHTML = '';
 
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const firstDay   = new Date(currentYear, currentMonth, 1).getDay();
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // Cargar config de disponibilidad una vez para todo el mes
+  let diasActivosSemana = null; // null = sin config (todos disponibles)
+  let fechasBloqueadas  = new Set();
+
+  if (typeof window.obtenerConfigDisponibilidad === 'function') {
+    const config = await window.obtenerConfigDisponibilidad(currentYear, currentMonth);
+    diasActivosSemana = config.diasActivos;   // Set con índices 0-6
+    fechasBloqueadas  = config.fechasBloqueadas; // Set con strings "YYYY-MM-DD"
+  }
 
   // Días vacíos al inicio
   for (let i = 0; i < firstDay; i++) {
@@ -169,30 +180,25 @@ function renderCalendar() {
 
   // Días del mes
   for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(currentYear, currentMonth, day);
-    const dayBtn = document.createElement('button');
-    dayBtn.className = 'calendar__day';
+    const date    = new Date(currentYear, currentMonth, day);
+    const dayBtn  = document.createElement('button');
+    dayBtn.className  = 'calendar__day';
     dayBtn.textContent = day;
 
-    // Deshabilitar domingos y días pasados
-    const isSunday = date.getDay() === 0;
-    const isPast = date < today;
+    const isPast    = date < today;
+    const fechaISO  = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const isBloqueado = fechasBloqueadas.has(fechaISO);
+    const isDiaInactivo = diasActivosSemana && !diasActivosSemana.has(date.getDay());
 
-    if (isSunday || isPast) {
+    if (isPast || isBloqueado || isDiaInactivo) {
       dayBtn.classList.add('calendar__day--disabled');
       dayBtn.disabled = true;
     } else {
       dayBtn.addEventListener('click', () => selectDate(date, dayBtn));
     }
 
-    // Marcar día actual
-    if (date.getTime() === today.getTime()) {
-      dayBtn.classList.add('calendar__day--today');
-    }
-
-    // Marcar día seleccionado
-    if (bookingState.selectedDate &&
-        date.getTime() === bookingState.selectedDate.getTime()) {
+    if (date.getTime() === today.getTime()) dayBtn.classList.add('calendar__day--today');
+    if (bookingState.selectedDate && date.getTime() === bookingState.selectedDate.getTime()) {
       dayBtn.classList.add('calendar__day--selected');
     }
 
@@ -200,8 +206,7 @@ function renderCalendar() {
   }
 }
 
-function selectDate(date, element) {
-  // Remover selección anterior
+async function selectDate(date, element) {
   document.querySelectorAll('.calendar__day--selected')
     .forEach(el => el.classList.remove('calendar__day--selected'));
 
@@ -209,33 +214,40 @@ function selectDate(date, element) {
   bookingState.selectedDate = date;
   bookingState.selectedTime = null;
 
-  // Mostrar horarios
   const dateText = formatDate(date);
   document.getElementById('selected-date-text').textContent = dateText;
 
-  renderTimeslots();
+  const fechaISO = date.toISOString().split('T')[0];
+  let slotsDisponibles = null;
+  let horasOcupadas    = [];
+
+  if (typeof window.obtenerDisponibilidad === 'function') {
+    const disp       = await window.obtenerDisponibilidad(fechaISO);
+    slotsDisponibles = disp.slotsDisponibles;
+    horasOcupadas    = disp.horasOcupadas;
+  }
+
+  renderTimeslots(horasOcupadas, slotsDisponibles);
   updateBookingSummary();
 }
 
-function renderTimeslots() {
+function renderTimeslots(horasOcupadas = [], slotsDisponibles = null) {
   const container = document.getElementById('timeslots-grid');
   const timeslotsSection = document.getElementById('timeslots');
   container.innerHTML = '';
   timeslotsSection.classList.add('active');
 
-  // Simular algunos horarios no disponibles (aleatorio basado en fecha)
-  const seed = bookingState.selectedDate.getDate();
+  const slots = slotsDisponibles || availableSlots;
+  slots.sort();
 
-  availableSlots.forEach((slot, index) => {
+  slots.forEach((slot) => {
     const btn = document.createElement('button');
     btn.className = 'timeslot';
     btn.textContent = slot;
     btn.type = 'button';
 
-    // Simular disponibilidad
-    const isUnavailable = (seed + index) % 4 === 0;
-
-    if (isUnavailable) {
+    // Hora ocupada si ya existe una cita en Firebase para esa hora
+    if (horasOcupadas.includes(slot)) {
       btn.classList.add('timeslot--unavailable');
       btn.disabled = true;
     } else {
@@ -264,25 +276,6 @@ function selectTimeslot(time, element) {
 // ============================================
 function initBookingForm() {
   const form = document.getElementById('booking-form');
-  const planSelect = document.getElementById('plan-select');
-
-  planSelect.addEventListener('change', (e) => {
-    const plans = {
-      individual: { name: 'Consulta Individual', price: 800 },
-      pack: { name: 'Pack 4 Sesiones', price: 2800 },
-      pareja: { name: 'Terapia de Pareja', price: 1200 },
-    };
-
-    const plan = plans[e.target.value];
-    if (plan) {
-      bookingState.selectedPlan = e.target.value;
-      bookingState.planName = plan.name;
-      bookingState.planPrice = plan.price;
-    } else {
-      bookingState.selectedPlan = null;
-    }
-    updateBookingSummary();
-  });
 
   // Validar campos en tiempo real
   const inputs = form.querySelectorAll('input, select, textarea');
@@ -290,17 +283,44 @@ function initBookingForm() {
     input.addEventListener('input', updateBookingSummary);
   });
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (validateBooking()) {
-      openPaymentModal();
+    const note = document.getElementById('booking-required-note');
+    if (!validateBooking()) {
+      note.classList.remove('hidden');
+      return;
     }
+    note.classList.add('hidden');
+
+    // Recolectar datos del formulario
+    const datos = {
+      nombre:   document.getElementById('patient-name').value.trim(),
+      correo:   document.getElementById('patient-email').value.trim(),
+      telefono: document.getElementById('patient-phone').value.trim(),
+      motivo:   document.getElementById('patient-reason').value.trim(),
+      plan:     bookingState.planName,
+      fecha:    bookingState.selectedDate
+                  ? bookingState.selectedDate.toISOString().split('T')[0]
+                  : '',
+      hora:     bookingState.selectedTime,
+    };
+
+    // Guardar en Firebase (window.guardarCita viene del módulo en index.html)
+    if (typeof window.guardarCita === 'function') {
+      const resultado = await window.guardarCita(datos);
+      if (!resultado.ok) {
+        showAlert('Hubo un problema al registrar tu cita. Intenta nuevamente.');
+        return;
+      }
+    }
+
+    // Si se guardó bien, abrir modal de pago
+    openPaymentModal();
   });
 }
 
 function updateBookingSummary() {
   const summary = document.getElementById('booking-summary');
-  const submitBtn = document.getElementById('booking-submit');
 
   const hasPlan = bookingState.selectedPlan;
   const hasDate = bookingState.selectedDate;
@@ -319,23 +339,46 @@ function updateBookingSummary() {
   document.getElementById('summary-total').textContent =
     bookingState.planPrice ? `$${bookingState.planPrice.toLocaleString()}` : '-';
 
-  // Habilitar botón solo si todo está completo
-  const form = document.getElementById('booking-form');
-  const allFieldsFilled = form.checkValidity() && hasPlan && hasDate && hasTime;
-  submitBtn.disabled = !allFieldsFilled;
 }
 
 function validateBooking() {
-  if (!bookingState.selectedPlan) {
-    showAlert('Por favor selecciona un plan.');
+  const nombre   = document.getElementById('patient-name').value.trim();
+  const correo   = document.getElementById('patient-email').value.trim();
+  const telefono = document.getElementById('patient-phone').value.trim();
+  const motivo   = document.getElementById('patient-reason').value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!nombre) {
+    showAlert('Por favor ingresa tu nombre completo.');
+    document.getElementById('patient-name').focus();
+    return false;
+  }
+  if (!correo) {
+    showAlert('Por favor ingresa tu correo electrónico.');
+    document.getElementById('patient-email').focus();
+    return false;
+  }
+  if (!emailRegex.test(correo)) {
+    showAlert('El correo electrónico no es válido.');
+    document.getElementById('patient-email').focus();
+    return false;
+  }
+  if (!telefono) {
+    showAlert('Por favor ingresa tu teléfono.');
+    document.getElementById('patient-phone').focus();
+    return false;
+  }
+  if (!motivo) {
+    showAlert('Por favor describe brevemente el motivo de tu consulta.');
+    document.getElementById('patient-reason').focus();
     return false;
   }
   if (!bookingState.selectedDate) {
-    showAlert('Por favor selecciona una fecha.');
+    showAlert('Por favor selecciona una fecha en el calendario.');
     return false;
   }
   if (!bookingState.selectedTime) {
-    showAlert('Por favor selecciona un horario.');
+    showAlert('Por favor selecciona un horario disponible.');
     return false;
   }
   return true;
@@ -344,15 +387,18 @@ function validateBooking() {
 // Función global para seleccionar plan desde las tarjetas
 function selectPlan(planId, planName, planPrice) {
   bookingState.selectedPlan = planId;
-  bookingState.planName = planName;
-  bookingState.planPrice = planPrice;
+  bookingState.planName     = planName;
+  bookingState.planPrice    = planPrice;
 
-  // Actualizar el select
-  document.getElementById('plan-select').value = planId;
+  // Marcar la opción correspondiente en el selector de sesiones del formulario
+  const radio = document.querySelector(`input[name="session-type"][value="${planId}"]`);
+  if (radio) {
+    radio.checked = true;
+    document.querySelectorAll('.session-option').forEach(el => el.classList.remove('session-option--selected'));
+    radio.closest('.session-option')?.classList.add('session-option--selected');
+  }
 
-  // Scroll a la sección de agendar
   document.getElementById('agendar').scrollIntoView({ behavior: 'smooth' });
-
   updateBookingSummary();
 }
 
@@ -467,6 +513,7 @@ function processPayment() {
 function initCertificateModal() {
   const modal = document.getElementById('certificate-modal');
   const closeBtn = document.getElementById('cert-modal-close');
+  if (!modal || !closeBtn) return;
 
   closeBtn.addEventListener('click', closeCertificateModal);
   modal.addEventListener('click', (e) => {

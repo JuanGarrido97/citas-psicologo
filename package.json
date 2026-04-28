@@ -1,0 +1,12 @@
+{
+  "name": "citas-psicologo",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx concurrently \"npx sass --watch scss/main.scss:css/styles.css --no-source-map\" \"npx live-server --port=3000 --ignore=scss\"",
+    "build": "npx sass scss/main.scss css/styles.css --no-source-map --style=compressed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "live-server": "^1.2.2"
+  }
+}

@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración — Psic. Ariel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ── LOGIN ── -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo__icon">P</div>
+        <span class="login-logo__text">Psic. Ariel</span>
+      </div>
+      <h1>Panel de Administración</h1>
+      <p class="login-subtitle">Acceso exclusivo para el administrador</p>
+
+      <form class="login-form" id="login-form" novalidate>
+        <div class="login-field">
+          <label for="admin-email">Correo electrónico</label>
+          <input type="email" id="admin-email" placeholder="admin@correo.com" required>
+        </div>
+        <div class="login-field">
+          <label for="admin-password">Contraseña</label>
+          <input type="password" id="admin-password" placeholder="••••••••" required>
+          <button type="button" class="password-toggle" id="password-toggle" aria-label="Mostrar contraseña">&#128065;</button>
+        </div>
+        <p class="login-error hidden" id="login-error"></p>
+        <button type="submit" class="login-btn" id="login-btn">Iniciar sesión</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── PANEL PRINCIPAL ── -->
+  <div class="admin hidden" id="admin-panel">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <div class="sidebar__logo">
+          <div class="sidebar__logo-icon">P</div>
+          <span class="sidebar__logo-text">Psic. Ariel</span>
+        </div>
+        <button class="sidebar__close" id="sidebar-close" aria-label="Cerrar menú">&#10005;</button>
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="#" class="sidebar__link active" data-section="dashboard">
+          <span class="sidebar__icon">&#9781;</span> Dashboard
+        </a>
+        <a href="#" class="sidebar__link" data-section="citas">
+          <span class="sidebar__icon">&#128197;</span> Citas
+        </a>
+        <a href="#" class="sidebar__link" data-section="comentarios">
+          <span class="sidebar__icon">&#128172;</span> Comentarios
+        </a>
+        <a href="#" class="sidebar__link" data-section="calendario">
+          <span class="sidebar__icon">&#128197;</span> Calendario
+        </a>
+        <a href="#" class="sidebar__link" data-section="pacientes">
+          <span class="sidebar__icon">&#128101;</span> Pacientes
+        </a>
+        <a href="#" class="sidebar__link" data-section="agendar">
+          <span class="sidebar__icon">&#43;</span> Agendar cita
+        </a>
+        <a href="#" class="sidebar__link" data-section="sesion">
+          <span class="sidebar__icon">&#9881;</span> Sesión
+        </a>
+      </nav>
+
+      <button class="sidebar__logout" id="logout-btn">
+        <span>&#128275;</span> Cerrar sesión
+      </button>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="admin__main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="topbar__menu" id="menu-toggle" aria-label="Abrir menú">&#9776;</button>
+        <h2 class="topbar__title" id="topbar-title">Dashboard</h2>
+        <div class="topbar__user">
+          <span class="topbar__user-dot"></span>
+          <span id="topbar-email"></span>
+        </div>
+      </header>
+
+      <!-- Secciones -->
+      <main class="admin__content">
+
+        <!-- Dashboard -->
+        <section class="panel active" id="panel-dashboard">
+          <div class="welcome-card">
+            <h2>Bienvenido, Dr. Ariel &#128075;</h2>
+            <p>Desde aquí puedes gestionar las citas y comentarios de tu sitio web.</p>
+          </div>
+          <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+              <span class="stat-card__icon">&#128197;</span>
+              <div>
+                <p class="stat-card__label">Citas pendientes</p>
+                <p class="stat-card__value" id="stat-pendientes">—</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__icon">&#10003;</span>
+              <div>
+                <p class="stat-card__label">Citas confirmadas</p>
+                <p class="stat-card__value" id="stat-confirmadas">—</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card__icon">&#128172;</span>
+              <div>
+                <p class="stat-card__label">Comentarios</p>
+                <p class="stat-card__value" id="stat-comentarios">—</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Citas pendientes -->
+          <div class="dashboard-section">
+            <h3 class="dashboard-section__title">&#128197; Citas pendientes</h3>
+            <div id="dashboard-citas-list">
+              <p class="loading-text">Cargando...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Citas -->
+        <section class="panel" id="panel-citas">
+          <h3 class="panel__title">Citas agendadas</h3>
+
+          <div class="filter-tabs" id="filter-tabs">
+            <button class="filter-tab active" data-filter="todas">Todas</button>
+            <button class="filter-tab" data-filter="pendiente">Pendientes</button>
+            <button class="filter-tab" data-filter="confirmada">Confirmadas</button>
+            <button class="filter-tab" data-filter="cancelada">Canceladas</button>
+          </div>
+
+          <div id="citas-list">
+            <p class="loading-text">Cargando citas...</p>
+          </div>
+        </section>
+
+        <!-- Comentarios -->
+        <section class="panel" id="panel-comentarios">
+          <div id="comentarios-list" class="comentarios-grid">
+            <p class="loading-text">Cargando comentarios...</p>
+          </div>
+        </section>
+
+        <!-- Calendario -->
+        <section class="panel" id="panel-calendario">
+
+          <!-- Horario semanal -->
+          <div class="cal-section">
+            <h3 class="cal-section__title">Horario semanal</h3>
+            <p class="cal-section__sub">Define qué días y horarios estarás disponible por defecto.</p>
+            <div id="horario-semanal"></div>
+            <button class="btn-save" id="btn-guardar-horario">&#10003; Guardar horario</button>
+            <p class="save-ok hidden" id="save-ok-horario">¡Horario guardado!</p>
+          </div>
+
+          <!-- Días bloqueados -->
+          <div class="cal-section">
+            <h3 class="cal-section__title">Días bloqueados</h3>
+            <p class="cal-section__sub">Marca fechas específicas en que no atenderás o bloquea horarios puntuales.</p>
+            <div class="bloquear-fecha-form">
+              <input type="date" id="fecha-bloquear">
+              <button class="btn-save" id="btn-cargar-slots-bloqueo">Seleccionar horarios →</button>
+            </div>
+
+            <div id="bloqueo-slots-panel" class="hidden">
+              <label class="bloqueo-todo-dia">
+                <input type="checkbox" id="bloqueo-todo-dia"> Bloquear todo el día
+              </label>
+              <div class="dia-config__slots" id="bloqueo-slots-grid"></div>
+              <button class="btn-save" id="btn-bloquear-fecha">+ Bloquear</button>
+            </div>
+
+            <div id="dias-bloqueados-list"></div>
+          </div>
+
+        </section>
+
+        <!-- Pacientes -->
+        <section class="panel" id="panel-pacientes">
+          <div class="pacientes-layout">
+
+            <!-- Lista -->
+            <div class="pacientes-lista">
+              <div class="pacientes-lista__header">
+                <input type="text" id="pacientes-search" placeholder="&#128269; Buscar paciente..." class="pacientes-search">
+                <button class="btn-save" id="btn-nuevo-paciente">+ Nuevo</button>
+              </div>
+              <div id="pacientes-list-items">
+                <p class="loading-text">Cargando...</p>
+              </div>
+            </div>
+
+            <!-- Ficha -->
+            <div class="paciente-ficha" id="paciente-ficha">
+              <div class="paciente-ficha__empty" id="ficha-empty">
+                <span>&#128101;</span>
+                <p>Selecciona un paciente para ver su ficha</p>
+              </div>
+
+              <div class="paciente-ficha__content hidden" id="ficha-content">
+
+                <!-- Header ficha -->
+                <div class="ficha-header">
+                  <div class="ficha-header__avatar" id="ficha-avatar"></div>
+                  <div>
+                    <h3 id="ficha-nombre"></h3>
+                    <p id="ficha-contacto"></p>
+                  </div>
+                  <button class="btn-action btn-action--cancel btn-sm" id="btn-eliminar-paciente">&#10005; Eliminar ficha</button>
+                </div>
+
+                <!-- Patologías -->
+                <div class="ficha-section">
+                  <h4 class="ficha-section__title">Patologías / Diagnósticos</h4>
+                  <div class="patologias-tags" id="patologias-tags"></div>
+                  <div class="patologia-add">
+                    <input type="text" id="nueva-patologia" placeholder="Agregar patología..." maxlength="60">
+                    <button class="btn-save btn-sm-save" id="btn-add-patologia">+ Agregar</button>
+                  </div>
+                </div>
+
+                <!-- Medicamentos -->
+                <div class="ficha-section">
+                  <h4 class="ficha-section__title">Medicamentos</h4>
+                  <div class="patologias-tags" id="medicamentos-tags"></div>
+                  <div class="patologia-add">
+                    <input type="text" id="nuevo-medicamento" placeholder="Ej: Sertralina 50mg..." maxlength="80">
+                    <button class="btn-save btn-sm-save" id="btn-add-medicamento">+ Agregar</button>
+                  </div>
+                </div>
+
+                <!-- Notas -->
+                <div class="ficha-section">
+                  <h4 class="ficha-section__title">Notas clínicas</h4>
+                  <div class="nota-nueva">
+                    <textarea id="nueva-nota" rows="3" placeholder="Escribe una nota o apunte clínico..."></textarea>
+                    <button class="btn-save" id="btn-guardar-nota">Guardar nota</button>
+                  </div>
+                  <div id="notas-list"></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Agendar cita (admin) -->
+        <section class="panel" id="panel-agendar">
+          <div class="agendar-admin-layout">
+
+            <!-- Formulario -->
+            <div class="agendar-admin-form">
+              <h3 class="cal-section__title">Datos del paciente</h3>
+
+              <div class="agendar-field">
+                <label>Nombre completo <span class="req">*</span></label>
+                <input type="text" id="ag-nombre" placeholder="Nombre Apellido">
+                <div class="ag-sugerencias hidden" id="ag-sugerencias"></div>
+              </div>
+              <div class="agendar-field">
+                <label>Correo electrónico <span class="req">*</span></label>
+                <input type="email" id="ag-correo" placeholder="correo@ejemplo.com">
+              </div>
+              <div class="agendar-field">
+                <label>Teléfono <span class="req">*</span></label>
+                <input type="tel" id="ag-telefono" placeholder="+56 9 ...">
+              </div>
+              <div class="agendar-field">
+                <label>Motivo de consulta</label>
+                <textarea id="ag-motivo" rows="3" placeholder="Breve descripción..."></textarea>
+              </div>
+
+              <h3 class="cal-section__title" style="margin-top:1.25rem">Fecha y horario</h3>
+
+              <!-- Mini calendario admin -->
+              <div class="ag-calendario">
+                <div class="ag-cal-header">
+                  <button class="ag-cal-nav" id="ag-prev">&#8249;</button>
+                  <span id="ag-mes-año"></span>
+                  <button class="ag-cal-nav" id="ag-next">&#8250;</button>
+                </div>
+                <div class="ag-cal-dias-semana">
+                  <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span>
+                  <span>Jue</span><span>Vie</span><span>Sáb</span>
+                </div>
+                <div class="ag-cal-grid" id="ag-cal-grid"></div>
+              </div>
+
+              <!-- Slots -->
+              <div class="ag-slots-section hidden" id="ag-slots-section">
+                <label>Horario disponible <span class="req">*</span></label>
+                <div class="ag-slots-grid" id="ag-slots-grid"></div>
+              </div>
+
+              <!-- Resumen -->
+              <div class="ag-resumen hidden" id="ag-resumen">
+                <p>&#128197; <span id="ag-res-fecha"></span> &nbsp; &#128336; <span id="ag-res-hora"></span></p>
+              </div>
+
+              <p class="ag-error hidden" id="ag-error"></p>
+              <button class="btn-save ag-submit" id="ag-submit">&#128197; Agendar cita</button>
+              <p class="save-ok hidden" id="ag-ok">&#10003; Cita agendada correctamente</p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Sesiones -->
+        <section class="panel" id="panel-sesion">
+          <div class="sesiones-layout">
+
+            <!-- Lista de sesiones -->
+            <div class="sesiones-lista cal-section">
+              <div class="sesiones-lista__header">
+                <h3 class="cal-section__title" style="margin-bottom:0">Sesiones</h3>
+                <button class="btn-save btn-sm-save" id="btn-nueva-sesion">+ Nueva</button>
+              </div>
+              <div id="sesiones-list-items"><p class="loading-text">Cargando...</p></div>
+            </div>
+
+            <!-- Editor -->
+            <div id="sesion-editor-wrap">
+              <div class="sesion-editor-empty" id="sesion-editor-empty">
+                <span>&#9881;</span>
+                <p>Selecciona una sesión para editarla o crea una nueva</p>
+              </div>
+
+              <div class="hidden" id="sesion-editor">
+                <div class="sesion-layout">
+                  <!-- Formulario -->
+                  <div class="sesion-form cal-section">
+                    <div class="sesion-form-header">
+                      <h3 class="cal-section__title" style="margin-bottom:0" id="ses-form-titulo">Editar sesión</h3>
+                      <button class="btn-action btn-action--cancel btn-sm" id="btn-eliminar-sesion">&#10005; Eliminar</button>
+                    </div>
+                    <p class="cal-section__sub">Los cambios se reflejan automáticamente en el sitio web.</p>
+
+                    <div class="agendar-field">
+                      <label>Etiqueta superior</label>
+                      <input type="text" id="ses-etiqueta" placeholder="SESIÓN ONLINE" maxlength="40">
+                    </div>
+                    <div class="agendar-field">
+                      <label>Nombre de la sesión</label>
+                      <input type="text" id="ses-nombre" placeholder="Sesión Individual" maxlength="60">
+                    </div>
+                    <div class="agendar-field">
+                      <label>Descripción (opcional)</label>
+                      <textarea id="ses-descripcion" rows="2" placeholder="Breve descripción de esta modalidad..."></textarea>
+                    </div>
+                    <div class="sesion-precio-row">
+                      <div class="agendar-field" style="flex:1">
+                        <label>Precio (CLP)</label>
+                        <input type="number" id="ses-precio" placeholder="30000" min="0">
+                      </div>
+                      <div class="agendar-field" style="flex:1">
+                        <label>Subtexto precio</label>
+                        <input type="text" id="ses-precio-label" placeholder="CLP / sesión" maxlength="30">
+                      </div>
+                    </div>
+                    <div class="agendar-field">
+                      <label>Características</label>
+                      <div id="ses-caracteristicas-list"></div>
+                      <div class="patologia-add" style="margin-top:0.5rem">
+                        <input type="text" id="nueva-caracteristica" placeholder="Ej: Duración: 50 minutos" maxlength="80">
+                        <button class="btn-save btn-sm-save" id="btn-add-caracteristica">+ Agregar</button>
+                      </div>
+                    </div>
+                    <button class="btn-save" id="btn-guardar-sesion">&#10003; Guardar cambios</button>
+                    <p class="save-ok hidden" id="save-ok-sesion">&#10003; Guardado</p>
+                  </div>
+
+                  <!-- Preview -->
+                  <div class="sesion-preview">
+                    <h3 class="cal-section__title" style="margin-bottom:1rem">Vista previa</h3>
+                    <div id="sesion-card-preview"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal nuevo paciente -->
+  <div class="modal-overlay hidden" id="modal-nuevo-paciente">
+    <div class="modal-box">
+      <h3>Nuevo paciente</h3>
+      <div class="login-field">
+        <label>Nombre completo</label>
+        <input type="text" id="np-nombre" placeholder="Nombre Apellido">
+      </div>
+      <div class="login-field">
+        <label>Correo electrónico</label>
+        <input type="email" id="np-correo" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="login-field">
+        <label>Teléfono</label>
+        <input type="tel" id="np-telefono" placeholder="+56 9 ...">
+      </div>
+      <div class="modal-box__btns">
+        <button class="btn-save" id="btn-confirmar-nuevo-paciente">Crear paciente</button>
+        <button class="btn-action btn-action--cancel" id="btn-cancelar-nuevo-paciente">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, setDoc, onSnapshot, query, orderBy, arrayUnion, arrayRemove, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDKIEIdG7-9LFyqTHWsDBymTctd6h4BP6A",
+      authDomain: "citas-psicologo-c50fe.firebaseapp.com",
+      projectId: "citas-psicologo-c50fe",
+      storageBucket: "citas-psicologo-c50fe.firebasestorage.app",
+      messagingSenderId: "678086433358",
+      appId: "1:678086433358:web:262296da396869fdce411f"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    // ── ESTADO DE AUTENTICACIÓN ──
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        showPanel(user.email);
+      } else {
+        showLogin();
+      }
+    });
+
+    function showLogin() {
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('admin-panel').classList.add('hidden');
+    }
+    function showPanel(email) {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+      document.getElementById('topbar-email').textContent = email;
+      loadCitas();
+      loadComentarios();
+      loadCalendario();
+      loadPacientes();
+      initAgendarAdmin();
+      loadSesion();
+    }
+
+    function capitalize(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+    }
+
+    // ── LOGIN ──
+    const loginForm = document.getElementById('login-form');
+    const loginBtn  = document.getElementById('login-btn');
+    const loginError = document.getElementById('login-error');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('admin-email').value.trim();
+      const password = document.getElementById('admin-password').value;
+      loginBtn.textContent = 'Ingresando...';
+      loginBtn.disabled = true;
+      loginError.classList.add('hidden');
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        loginError.textContent = 'Correo o contraseña incorrectos.';
+        loginError.classList.remove('hidden');
+      } finally {
+        loginBtn.textContent = 'Iniciar sesión';
+        loginBtn.disabled = false;
+      }
+    });
+
+    // ── LOGOUT ──
+    document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+
+    // ── MOSTRAR/OCULTAR CONTRASEÑA ──
+    document.getElementById('password-toggle').addEventListener('click', () => {
+      const input = document.getElementById('admin-password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+
+    // ── NAVEGACIÓN SIDEBAR ──
+    document.querySelectorAll('.sidebar__link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const section = link.dataset.section;
+        document.querySelectorAll('.sidebar__link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        link.classList.add('active');
+        document.getElementById(`panel-${section}`).classList.add('active');
+        document.getElementById('topbar-title').textContent =
+          link.textContent.trim().replace(/^\S+\s/, '');
+        closeSidebar();
+      });
+    });
+
+    // ── SIDEBAR MÓVIL ──
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.add('open');
+    });
+    document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+
+    // ── ESTADÍSTICAS Y CITAS PENDIENTES DASHBOARD ──
+    async function loadStats() {
+      try {
+        const [citasSnap, comentariosSnap] = await Promise.all([
+          getDocs(collection(db, 'citas')),
+          getDocs(collection(db, 'comentarios'))
+        ]);
+
+        const todasCitas  = citasSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const pendientes  = todasCitas.filter(d => d.estado === 'pendiente');
+        const confirmadas = todasCitas.filter(d => d.estado === 'confirmada');
+
+        document.getElementById('stat-pendientes').textContent  = pendientes.length;
+        document.getElementById('stat-confirmadas').textContent = confirmadas.length;
+        document.getElementById('stat-comentarios').textContent = comentariosSnap.size;
+
+        renderCitasPendientes(pendientes);
+      } catch (e) {
+        console.error('Error cargando stats:', e);
+      }
+    }
+
+    function renderCitasPendientes(citas) {
+      const container = document.getElementById('dashboard-citas-list');
+
+      if (citas.length === 0) {
+        container.innerHTML = '<p class="empty-text">No hay citas pendientes.</p>';
+        return;
+      }
+
+      citas.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+      container.innerHTML = citas.map(c => {
+        const paciente     = pacientesData.find(p => p.correo === c.correo);
+        const patologias   = paciente?.patologias || [];
+        const medicamentos = paciente?.medicamentos || [];
+        const tagsHtml = [
+          ...patologias.map(t => `<span class="patologia-tag-sm">${t}</span>`),
+          ...medicamentos.map(m => `<span class="patologia-tag-sm patologia-tag-sm--med">&#128138; ${m}</span>`)
+        ].join('');
+        const fichaHtml = tagsHtml ? `<div class="cita-patologias">${tagsHtml}</div>` : '';
+        return `
+          <div class="cita-row">
+            <div class="cita-row__left">
+              <p class="cita-row__name">${c.nombre}</p>
+              <p class="cita-row__detail">&#128231; ${c.correo}</p>
+              <p class="cita-row__detail">&#128222; ${c.telefono}</p>
+              ${fichaHtml}
+              <div class="cita-row__tags">
+                <span class="cita-row__fecha">&#128197; ${formatFecha(c.fecha)}</span>
+                <span class="cita-row__hora">&#128336; ${c.hora}</span>
+                <span class="badge badge--pendiente">Pendiente</span>
+              </div>
+            </div>
+            <div class="cita-row__right">
+              <p class="cita-row__motivo-label">Motivo de consulta</p>
+              <p class="cita-row__motivo">${c.motivo || '—'}</p>
+              <button class="btn-ver" onclick="irACitas()">Ver →</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── SECCIÓN CITAS ──
+    let todasLasCitas = [];
+    let filtroActivo  = 'todas';
+
+    function loadCitas() {
+      const q = query(collection(db, 'citas'), orderBy('creadaEn', 'desc'));
+      onSnapshot(q, (snapshot) => {
+        todasLasCitas = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderCitas();
+        actualizarStats();
+      });
+    }
+
+    function renderCitas() {
+      const container = document.getElementById('citas-list');
+      const filtradas = filtroActivo === 'todas'
+        ? todasLasCitas
+        : todasLasCitas.filter(c => c.estado === filtroActivo);
+
+      if (filtradas.length === 0) {
+        container.innerHTML = '<p class="empty-text">No hay citas en esta categoría.</p>';
+        return;
+      }
+
+      container.innerHTML = filtradas.map(c => {
+        const paciente     = pacientesData.find(p => p.correo === c.correo);
+        const patologias   = paciente?.patologias   || [];
+        const medicamentos = paciente?.medicamentos || [];
+        const allTags = [
+          ...patologias.map(t => `<span class="patologia-tag-sm">${t}</span>`),
+          ...medicamentos.map(m => `<span class="patologia-tag-sm patologia-tag-sm--med">&#128138; ${m}</span>`)
+        ].join('');
+        const tagsHtml = allTags ? `<div class="cita-patologias" style="margin-top:0.5rem">${allTags}</div>` : '';
+        return `
+          <div class="cita-card" id="cita-${c.id}">
+            <div class="cita-card__header">
+              <div>
+                <p class="cita-card__name">${c.nombre}</p>
+                <p class="cita-card__contact">&#128231; ${c.correo} &nbsp;·&nbsp; &#128222; ${c.telefono}</p>
+                ${tagsHtml}
+              </div>
+              <span class="badge badge--${c.estado}">${capitalize(c.estado)}</span>
+            </div>
+            <div class="cita-card__body">
+              <div class="cita-card__datetime">
+                <span>&#128197; ${formatFecha(c.fecha)}</span>
+                <span>&#128336; ${c.hora}</span>
+                <span>&#128203; ${c.plan || 'Sesión Individual'}</span>
+              </div>
+              <div class="cita-card__motivo">
+                <p class="cita-row__motivo-label">Motivo de consulta</p>
+                <p>${c.motivo || '—'}</p>
+              </div>
+            </div>
+            <div class="cita-card__actions">
+              ${c.estado === 'pendiente' ? `
+                <button class="btn-action btn-action--confirm" onclick="cambiarEstado('${c.id}', 'confirmada')">
+                  &#10003; Confirmar cita
+                </button>
+              ` : ''}
+              ${c.estado !== 'cancelada' ? `
+                <button class="btn-action btn-action--cancel" onclick="cambiarEstado('${c.id}', 'cancelada')">
+                  &#10005; Cancelar
+                </button>
+              ` : ''}
+              ${c.estado === 'cancelada' ? `
+                <button class="btn-action btn-action--restore" onclick="cambiarEstado('${c.id}', 'pendiente')">
+                  &#8635; Restaurar
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function actualizarStats() {
+      document.getElementById('stat-pendientes').textContent  = todasLasCitas.filter(c => c.estado === 'pendiente').length;
+      document.getElementById('stat-confirmadas').textContent = todasLasCitas.filter(c => c.estado === 'confirmada').length;
+      renderCitasPendientes(todasLasCitas.filter(c => c.estado === 'pendiente'));
+    }
+
+    window.cambiarEstado = function(id, nuevoEstado) {
+      const mensajes = {
+        confirmada: '¿Estás seguro de que deseas confirmar esta cita?',
+        cancelada:  '¿Estás seguro de que deseas cancelar esta cita?',
+        pendiente:  '¿Deseas restaurar esta cita a pendiente?',
+      };
+      const card    = document.getElementById(`cita-${id}`);
+      const actions = card.querySelector('.cita-card__actions');
+
+      // Si ya hay un diálogo abierto en esta card, no abrir otro
+      if (card.querySelector('.cita-confirm')) return;
+
+      const dialogo = document.createElement('div');
+      dialogo.className = 'cita-confirm';
+      dialogo.innerHTML = `
+        <p class="cita-confirm__msg">${mensajes[nuevoEstado]}</p>
+        <div class="cita-confirm__btns">
+          <button class="btn-action btn-action--confirm" id="confirm-yes-${id}">Sí, continuar</button>
+          <button class="btn-action btn-action--cancel"  id="confirm-no-${id}">No, volver</button>
+        </div>
+      `;
+      actions.style.display = 'none';
+      card.appendChild(dialogo);
+
+      document.getElementById(`confirm-yes-${id}`).addEventListener('click', async () => {
+        dialogo.remove();
+        actions.style.display = '';
+        try {
+          await updateDoc(doc(db, 'citas', id), { estado: nuevoEstado });
+        } catch (e) {
+          console.error('Error actualizando cita:', e);
+        }
+      });
+
+      document.getElementById(`confirm-no-${id}`).addEventListener('click', () => {
+        dialogo.remove();
+        actions.style.display = '';
+      });
+    };
+
+    // Filtros
+    document.getElementById('filter-tabs').addEventListener('click', (e) => {
+      const tab = e.target.closest('.filter-tab');
+      if (!tab) return;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      filtroActivo = tab.dataset.filter;
+      renderCitas();
+    });
+
+    // ── SECCIÓN CALENDARIO ──
+    const DIAS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
+    const DIAS_LABEL = { lunes:'Lunes', martes:'Martes', miercoles:'Miércoles',
+                         jueves:'Jueves', viernes:'Viernes', sabado:'Sábado', domingo:'Domingo' };
+    const SLOTS_DISPONIBLES = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'];
+
+    const HORARIO_DEFAULT = {};
+    DIAS.forEach(d => {
+      HORARIO_DEFAULT[d] = {
+        activo: !['sabado','domingo'].includes(d),
+        slots: ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00']
+      };
+    });
+
+    let horarioActual = JSON.parse(JSON.stringify(HORARIO_DEFAULT));
+
+    function loadCalendario() {
+      // Cargar horario semanal
+      import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(({ getDoc, doc: fsDoc, setDoc, deleteDoc, onSnapshot, collection }) => {
+        getDoc(fsDoc(db, 'configuracion', 'horarios')).then(snap => {
+          if (snap.exists()) horarioActual = snap.data();
+          renderHorarioSemanal();
+        });
+
+        // Escuchar días bloqueados
+        onSnapshot(collection(db, 'diasBloqueados'), snap => {
+          const lista = document.getElementById('dias-bloqueados-list');
+          const dias  = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+                               .sort((a, b) => a.fecha.localeCompare(b.fecha));
+          if (dias.length === 0) {
+            lista.innerHTML = '<p class="empty-text">No hay fechas bloqueadas.</p>';
+            return;
+          }
+          lista.innerHTML = dias.map(d => `
+            <div class="dia-bloqueado-row">
+              <span class="dia-bloqueado-row__fecha">&#128683; ${formatFechaBloqueo(d.fecha)}</span>
+              <span class="dia-bloqueado-row__motivo">
+                ${d.todoElDia ? 'Todo el día' : (d.horasBloqueadas || []).join(', ')}
+              </span>
+              <button class="btn-action btn-action--cancel btn-sm" onclick="desbloquearFecha('${d.fecha}')">&#10005;</button>
+            </div>
+          `).join('');
+        });
+
+        // Cargar slots al seleccionar fecha
+        document.getElementById('btn-cargar-slots-bloqueo').addEventListener('click', async () => {
+          const fecha = document.getElementById('fecha-bloquear').value;
+          if (!fecha) return;
+
+          // Obtener slots del día según horario semanal
+          const DIAS_MAP = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+          const [y, m, d] = fecha.split('-').map(Number);
+          const diaSemana = DIAS_MAP[new Date(y, m-1, d).getDay()];
+          const horarioSnap = await getDoc(fsDoc(db, 'configuracion', 'horarios'));
+          let slots = SLOTS_DISPONIBLES;
+          if (horarioSnap.exists()) {
+            slots = horarioSnap.data()[diaSemana]?.slots || SLOTS_DISPONIBLES;
+          }
+
+          // Renderizar checkboxes de slots
+          const grid = document.getElementById('bloqueo-slots-grid');
+          grid.innerHTML = slots.map(s => `
+            <label class="slot-check" id="blq-slot-${s.replace(':','')}">
+              <input type="checkbox" value="${s}" class="bloqueo-slot-cb"> ${s}
+            </label>
+          `).join('');
+
+          // Sincronizar checkboxes con label
+          grid.querySelectorAll('.bloqueo-slot-cb').forEach(cb => {
+            cb.addEventListener('change', () => {
+              cb.closest('label').classList.toggle('slot-check--active', cb.checked);
+            });
+          });
+
+          document.getElementById('bloqueo-slots-panel').classList.remove('hidden');
+        });
+
+        // Toggle "todo el día" desactiva los checkboxes individuales
+        document.getElementById('bloqueo-todo-dia').addEventListener('change', function() {
+          const cbs = document.querySelectorAll('.bloqueo-slot-cb');
+          cbs.forEach(cb => { cb.disabled = this.checked; cb.closest('label').classList.toggle('slot-check--active', this.checked); });
+        });
+
+        // Bloquear fecha
+        document.getElementById('btn-bloquear-fecha').addEventListener('click', async () => {
+          const fecha      = document.getElementById('fecha-bloquear').value;
+          const todoElDia  = document.getElementById('bloqueo-todo-dia').checked;
+          if (!fecha) return;
+
+          let datos = { fecha, todoElDia };
+          if (!todoElDia) {
+            const seleccionados = [...document.querySelectorAll('.bloqueo-slot-cb:checked')].map(cb => cb.value);
+            if (seleccionados.length === 0) return;
+            datos.horasBloqueadas = seleccionados;
+          }
+
+          await setDoc(fsDoc(db, 'diasBloqueados', fecha), datos);
+          document.getElementById('fecha-bloquear').value = '';
+          document.getElementById('bloqueo-todo-dia').checked = false;
+          document.getElementById('bloqueo-slots-panel').classList.add('hidden');
+        });
+
+        // Guardar horario
+        document.getElementById('btn-guardar-horario').addEventListener('click', async () => {
+          await setDoc(fsDoc(db, 'configuracion', 'horarios'), horarioActual);
+          const ok = document.getElementById('save-ok-horario');
+          ok.classList.remove('hidden');
+          setTimeout(() => ok.classList.add('hidden'), 3000);
+        });
+
+        window.desbloquearFecha = async (fecha) => {
+          await deleteDoc(fsDoc(db, 'diasBloqueados', fecha));
+        };
+      });
+    }
+
+    function renderHorarioSemanal() {
+      const container = document.getElementById('horario-semanal');
+      container.innerHTML = DIAS.map(dia => {
+        const config = horarioActual[dia] || { activo: false, slots: [] };
+        return `
+          <div class="dia-config ${config.activo ? '' : 'dia-config--inactivo'}" id="dia-${dia}">
+            <div class="dia-config__header">
+              <label class="toggle">
+                <input type="checkbox" ${config.activo ? 'checked' : ''} onchange="toggleDia('${dia}', this.checked)">
+                <span class="toggle__slider"></span>
+              </label>
+              <span class="dia-config__nombre">${DIAS_LABEL[dia]}</span>
+            </div>
+            <div class="dia-config__slots ${config.activo ? '' : 'hidden'}">
+              ${SLOTS_DISPONIBLES.map(slot => `
+                <label class="slot-check ${config.slots.includes(slot) ? 'slot-check--active' : ''}">
+                  <input type="checkbox" ${config.slots.includes(slot) ? 'checked' : ''}
+                    onchange="toggleSlot('${dia}', '${slot}', this.checked)">
+                  ${slot}
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.toggleDia = function(dia, activo) {
+      horarioActual[dia].activo = activo;
+      const card   = document.getElementById(`dia-${dia}`);
+      const slots  = card.querySelector('.dia-config__slots');
+      card.classList.toggle('dia-config--inactivo', !activo);
+      slots.classList.toggle('hidden', !activo);
+    };
+
+    window.toggleSlot = function(dia, slot, activo) {
+      const slots = horarioActual[dia].slots;
+      if (activo && !slots.includes(slot)) slots.push(slot);
+      if (!activo) horarioActual[dia].slots = slots.filter(s => s !== slot);
+      const label = document.querySelector(`#dia-${dia} input[onchange*="${slot}"]`)?.closest('label');
+      if (label) label.classList.toggle('slot-check--active', activo);
+    };
+
+    function formatFechaBloqueo(iso) {
+      const [y, m, d] = iso.split('-');
+      return new Date(y, m-1, d).toLocaleDateString('es-CL', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    }
+
+    // ── SECCIÓN PACIENTES ──
+    let pacientesData = [];
+    let pacienteActivoId = null;
+
+    function loadPacientes() {
+      onSnapshot(collection(db, 'pacientes'), snap => {
+        pacientesData = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        renderListaPacientes(pacientesData);
+        if (pacienteActivoId) renderFicha(pacienteActivoId);
+        // Re-renderizar citas para mostrar patologías actualizadas
+        if (todasLasCitas.length > 0) {
+          renderCitas();
+          renderCitasPendientes(todasLasCitas.filter(c => c.estado === 'pendiente'));
+        }
+      });
+    }
+
+    function renderListaPacientes(lista) {
+      const container = document.getElementById('pacientes-list-items');
+      if (lista.length === 0) {
+        container.innerHTML = '<p class="empty-text">Sin pacientes registrados.</p>';
+        return;
+      }
+      container.innerHTML = lista.map(p => `
+        <div class="paciente-item ${p.id === pacienteActivoId ? 'paciente-item--active' : ''}"
+             onclick="seleccionarPaciente('${p.id}')">
+          <div class="paciente-item__avatar">${p.nombre.charAt(0).toUpperCase()}</div>
+          <div>
+            <p class="paciente-item__nombre">${p.nombre}</p>
+            <p class="paciente-item__correo">${p.correo}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.seleccionarPaciente = function(id) {
+      pacienteActivoId = id;
+      renderListaPacientes(pacientesData);
+      renderFicha(id);
+    };
+
+    function renderFicha(id) {
+      const p = pacientesData.find(p => p.id === id);
+      if (!p) return;
+
+      document.getElementById('ficha-empty').classList.add('hidden');
+      document.getElementById('ficha-content').classList.remove('hidden');
+
+      document.getElementById('ficha-avatar').textContent = p.nombre.charAt(0).toUpperCase();
+      document.getElementById('ficha-nombre').textContent = p.nombre;
+      document.getElementById('ficha-contacto').textContent = `${p.correo}  ·  ${p.telefono || '—'}`;
+
+      // Patologías
+      renderPatologias(p.patologias || []);
+
+      // Medicamentos
+      renderMedicamentos(p.medicamentos || []);
+
+      // Notas
+      renderNotas(p.notas || []);
+
+      // Botón eliminar ficha
+      document.getElementById('btn-eliminar-paciente').onclick = () => eliminarPaciente(id, p.nombre);
+    }
+
+    function renderPatologias(lista) {
+      const container = document.getElementById('patologias-tags');
+      container.innerHTML = lista.length === 0
+        ? '<span class="empty-text" style="font-size:0.8rem">Sin patologías registradas.</span>'
+        : lista.map(tag => `
+            <span class="patologia-tag">
+              ${tag}
+              <button onclick="eliminarPatologia('${tag.replace(/'/g,"\\'")}')">&#10005;</button>
+            </span>
+          `).join('');
+    }
+
+    function renderMedicamentos(lista) {
+      const container = document.getElementById('medicamentos-tags');
+      container.innerHTML = lista.length === 0
+        ? '<span class="empty-text" style="font-size:0.8rem">Sin medicamentos registrados.</span>'
+        : lista.map(med => `
+            <span class="patologia-tag patologia-tag--med">
+              ${med}
+              <button onclick="eliminarMedicamento('${med.replace(/'/g,"\\'")}')">&#10005;</button>
+            </span>
+          `).join('');
+    }
+
+    function renderNotas(notas) {
+      const container = document.getElementById('notas-list');
+      if (notas.length === 0) {
+        container.innerHTML = '<p class="empty-text">Sin notas aún.</p>';
+        return;
+      }
+      const ordenadas = [...notas].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      container.innerHTML = ordenadas.map(n => `
+        <div class="nota-card">
+          <div class="nota-card__header">
+            <span class="nota-card__fecha">${new Date(n.fecha).toLocaleDateString('es-CL', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' })}</span>
+            <button class="btn-action btn-action--cancel btn-sm" onclick="eliminarNota('${n.id}')">&#10005;</button>
+          </div>
+          <p class="nota-card__texto">${n.texto}</p>
+        </div>
+      `).join('');
+    }
+
+    // Agregar patología
+    document.getElementById('btn-add-patologia').addEventListener('click', async () => {
+      const input = document.getElementById('nueva-patologia');
+      const valor = input.value.trim();
+      if (!valor || !pacienteActivoId) return;
+      await updateDoc(doc(db, 'pacientes', pacienteActivoId), { patologias: arrayUnion(valor) });
+      input.value = '';
+    });
+    document.getElementById('nueva-patologia').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('btn-add-patologia').click();
+    });
+
+    window.eliminarPatologia = async (tag) => {
+      if (!pacienteActivoId) return;
+      await updateDoc(doc(db, 'pacientes', pacienteActivoId), { patologias: arrayRemove(tag) });
+    };
+
+    // Medicamentos
+    document.getElementById('btn-add-medicamento').addEventListener('click', async () => {
+      const input = document.getElementById('nuevo-medicamento');
+      const valor = input.value.trim();
+      if (!valor || !pacienteActivoId) return;
+      await updateDoc(doc(db, 'pacientes', pacienteActivoId), { medicamentos: arrayUnion(valor) });
+      input.value = '';
+    });
+    document.getElementById('nuevo-medicamento').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('btn-add-medicamento').click();
+    });
+    window.eliminarMedicamento = async (med) => {
+      if (!pacienteActivoId) return;
+      await updateDoc(doc(db, 'pacientes', pacienteActivoId), { medicamentos: arrayRemove(med) });
+    };
+
+    // Guardar nota
+    document.getElementById('btn-guardar-nota').addEventListener('click', async () => {
+      const texto = document.getElementById('nueva-nota').value.trim();
+      if (!texto || !pacienteActivoId) return;
+      const nota = { id: Date.now().toString(), fecha: new Date().toISOString(), texto };
+      await updateDoc(doc(db, 'pacientes', pacienteActivoId), { notas: arrayUnion(nota) });
+      document.getElementById('nueva-nota').value = '';
+    });
+
+    window.eliminarNota = async (notaId) => {
+      if (!pacienteActivoId) return;
+      const p = pacientesData.find(p => p.id === pacienteActivoId);
+      const nota = (p?.notas || []).find(n => n.id === notaId);
+      if (!nota) return;
+      await updateDoc(doc(db, 'pacientes', pacienteActivoId), { notas: arrayRemove(nota) });
+    };
+
+    // Eliminar ficha completa
+    async function eliminarPaciente(id, nombre) {
+      if (!confirm(`¿Eliminar la ficha de ${nombre}? Esta acción no se puede deshacer.`)) return;
+      await deleteDoc(doc(db, 'pacientes', id));
+      pacienteActivoId = null;
+      document.getElementById('ficha-empty').classList.remove('hidden');
+      document.getElementById('ficha-content').classList.add('hidden');
+    }
+
+    // Nuevo paciente manual
+    document.getElementById('btn-nuevo-paciente').addEventListener('click', () => {
+      document.getElementById('modal-nuevo-paciente').classList.remove('hidden');
+    });
+    document.getElementById('btn-cancelar-nuevo-paciente').addEventListener('click', () => {
+      document.getElementById('modal-nuevo-paciente').classList.add('hidden');
+    });
+    document.getElementById('btn-confirmar-nuevo-paciente').addEventListener('click', async () => {
+      const nombre   = document.getElementById('np-nombre').value.trim();
+      const correo   = document.getElementById('np-correo').value.trim();
+      const telefono = document.getElementById('np-telefono').value.trim();
+      if (!nombre || !correo) return;
+      const id = correo.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      await setDoc(doc(db, 'pacientes', id), { nombre, correo, telefono, patologias: [], notas: [], creadoEn: new Date().toISOString() });
+      document.getElementById('modal-nuevo-paciente').classList.add('hidden');
+      document.getElementById('np-nombre').value = '';
+      document.getElementById('np-correo').value = '';
+      document.getElementById('np-telefono').value = '';
+      seleccionarPaciente(id);
+    });
+
+    // Búsqueda
+    document.getElementById('pacientes-search').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      const filtrados = pacientesData.filter(p =>
+        p.nombre.toLowerCase().includes(q) || p.correo.toLowerCase().includes(q)
+      );
+      renderListaPacientes(filtrados);
+    });
+
+    // ── SECCIÓN AGENDAR (ADMIN) ──
+    const agState = { fecha: null, hora: null, mes: new Date().getMonth(), año: new Date().getFullYear() };
+    const MESES   = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const DIAS_IDX_MAP = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+
+    function initAgendarAdmin() {
+      document.getElementById('ag-prev').addEventListener('click', () => {
+        agState.mes--;
+        if (agState.mes < 0) { agState.mes = 11; agState.año--; }
+        renderAgCalendario();
+      });
+      document.getElementById('ag-next').addEventListener('click', () => {
+        agState.mes++;
+        if (agState.mes > 11) { agState.mes = 0; agState.año++; }
+        renderAgCalendario();
+      });
+
+      // Autocompletar paciente desde lista
+      document.getElementById('ag-nombre').addEventListener('input', function() {
+        const q = this.value.toLowerCase();
+        const lista = document.getElementById('ag-sugerencias');
+        if (!q || q.length < 2) { lista.classList.add('hidden'); return; }
+        const matches = pacientesData.filter(p => p.nombre.toLowerCase().includes(q) || p.correo.toLowerCase().includes(q)).slice(0, 5);
+        if (matches.length === 0) { lista.classList.add('hidden'); return; }
+        lista.innerHTML = matches.map(p => `
+          <div class="ag-sugerencia" onclick="seleccionarPacienteAg('${p.id}')">
+            <strong>${p.nombre}</strong> <span>${p.correo}</span>
+          </div>
+        `).join('');
+        lista.classList.remove('hidden');
+      });
+
+      document.getElementById('ag-submit').addEventListener('click', guardarCitaAdmin);
+      renderAgCalendario();
+    }
+
+    window.seleccionarPacienteAg = function(id) {
+      const p = pacientesData.find(p => p.id === id);
+      if (!p) return;
+      document.getElementById('ag-nombre').value   = p.nombre;
+      document.getElementById('ag-correo').value   = p.correo;
+      document.getElementById('ag-telefono').value = p.telefono || '';
+      document.getElementById('ag-sugerencias').classList.add('hidden');
+    };
+
+    async function renderAgCalendario() {
+      document.getElementById('ag-mes-año').textContent = `${MESES[agState.mes]} ${agState.año}`;
+      const grid    = document.getElementById('ag-cal-grid');
+      grid.innerHTML = '';
+      const hoy      = new Date(); hoy.setHours(0,0,0,0);
+      const firstDay = new Date(agState.año, agState.mes, 1).getDay();
+      const total    = new Date(agState.año, agState.mes + 1, 0).getDate();
+
+      // Cargar config disponibilidad
+      const horarioSnap = await getDoc(doc(db, 'configuracion', 'horarios'));
+      const horario     = horarioSnap.exists() ? horarioSnap.data() : null;
+
+      const bloqueadosSnap = await getDocs(collection(db, 'diasBloqueados'));
+      const bloqueadosTodos = {};
+      bloqueadosSnap.docs.forEach(d => { bloqueadosTodos[d.id] = d.data(); });
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'ag-day ag-day--empty';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= total; d++) {
+        const fecha   = new Date(agState.año, agState.mes, d);
+        const fechaISO = `${agState.año}-${String(agState.mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const diaNombre = DIAS_IDX_MAP[fecha.getDay()];
+        const btn = document.createElement('button');
+        btn.className = 'ag-day';
+        btn.textContent = d;
+
+        const isPast     = fecha < hoy;
+        const bloqueo    = bloqueadosTodos[fechaISO];
+        const todoElDia  = bloqueo?.todoElDia;
+        const diaInactivo = horario && (!horario[diaNombre] || !horario[diaNombre].activo);
+
+        if (isPast || todoElDia || diaInactivo) {
+          btn.classList.add('ag-day--disabled');
+          btn.disabled = true;
+        } else {
+          btn.addEventListener('click', () => seleccionarFechaAg(fecha, fechaISO, btn, horario, bloqueo));
+        }
+
+        if (agState.fecha === fechaISO) btn.classList.add('ag-day--selected');
+        grid.appendChild(btn);
+      }
+    }
+
+    async function seleccionarFechaAg(fecha, fechaISO, btn, horario, bloqueo) {
+      agState.fecha = fechaISO;
+      agState.hora  = null;
+      document.querySelectorAll('.ag-day--selected').forEach(b => b.classList.remove('ag-day--selected'));
+      btn.classList.add('ag-day--selected');
+
+      // Determinar slots disponibles
+      const diaNombre = DIAS_IDX_MAP[fecha.getDay()];
+      let slots = horario?.[diaNombre]?.slots || ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'];
+
+      // Quitar horas bloqueadas parcialmente
+      const horasBloqueadas = bloqueo?.horasBloqueadas || [];
+      slots = slots.filter(s => !horasBloqueadas.includes(s));
+
+      // Quitar horas ya reservadas
+      const citasSnap = await getDocs(collection(db, 'citas'));
+      const ocupadas  = citasSnap.docs.map(d => d.data()).filter(c => c.fecha === fechaISO && c.estado !== 'cancelada').map(c => c.hora);
+      slots = slots.filter(s => !ocupadas.includes(s));
+
+      const grid    = document.getElementById('ag-slots-grid');
+      const section = document.getElementById('ag-slots-section');
+      grid.innerHTML = slots.length === 0
+        ? '<p class="empty-text">No hay horarios disponibles para este día.</p>'
+        : slots.sort().map(s => `
+            <button class="ag-slot" onclick="seleccionarHoraAg('${s}', this)">${s}</button>
+          `).join('');
+      section.classList.remove('hidden');
+      document.getElementById('ag-resumen').classList.add('hidden');
+    }
+
+    window.seleccionarHoraAg = function(hora, btn) {
+      agState.hora = hora;
+      document.querySelectorAll('.ag-slot--selected').forEach(b => b.classList.remove('ag-slot--selected'));
+      btn.classList.add('ag-slot--selected');
+
+      const [y, m, d] = agState.fecha.split('-').map(Number);
+      const fechaLabel = new Date(y, m-1, d).toLocaleDateString('es-CL', { weekday:'long', day:'numeric', month:'long' });
+      document.getElementById('ag-res-fecha').textContent = fechaLabel;
+      document.getElementById('ag-res-hora').textContent  = hora;
+      document.getElementById('ag-resumen').classList.remove('hidden');
+    };
+
+    async function guardarCitaAdmin() {
+      const nombre   = document.getElementById('ag-nombre').value.trim();
+      const correo   = document.getElementById('ag-correo').value.trim();
+      const telefono = document.getElementById('ag-telefono').value.trim();
+      const motivo   = document.getElementById('ag-motivo').value.trim();
+      const error    = document.getElementById('ag-error');
+      error.classList.add('hidden');
+
+      if (!nombre)       { error.textContent = 'El nombre es obligatorio.';   error.classList.remove('hidden'); return; }
+      if (!correo)       { error.textContent = 'El correo es obligatorio.';   error.classList.remove('hidden'); return; }
+      if (!telefono)     { error.textContent = 'El teléfono es obligatorio.'; error.classList.remove('hidden'); return; }
+      if (!agState.fecha){ error.textContent = 'Selecciona una fecha.';       error.classList.remove('hidden'); return; }
+      if (!agState.hora) { error.textContent = 'Selecciona un horario.';      error.classList.remove('hidden'); return; }
+
+      const btn = document.getElementById('ag-submit');
+      btn.disabled = true; btn.textContent = 'Agendando...';
+
+      try {
+        await setDoc(doc(collection(db, 'citas')), {
+          nombre, correo, telefono, motivo,
+          plan:      'Sesión Individual',
+          fecha:     agState.fecha,
+          hora:      agState.hora,
+          estado:    'confirmada',
+          creadaEn:  serverTimestamp(),
+          agendadoPor: 'admin'
+        });
+        // Resetear
+        ['ag-nombre','ag-correo','ag-telefono','ag-motivo'].forEach(id => document.getElementById(id).value = '');
+        agState.fecha = null; agState.hora = null;
+        document.getElementById('ag-slots-section').classList.add('hidden');
+        document.getElementById('ag-resumen').classList.add('hidden');
+        renderAgCalendario();
+        const ok = document.getElementById('ag-ok');
+        ok.classList.remove('hidden');
+        setTimeout(() => ok.classList.add('hidden'), 4000);
+      } catch(e) {
+        error.textContent = 'Error al guardar. Intenta nuevamente.';
+        error.classList.remove('hidden');
+      } finally {
+        btn.disabled = false; btn.textContent = '📅 Agendar cita';
+      }
+    }
+
+    // ── SECCIÓN SESIONES ──
+    let sesionesData    = [];
+    let sesionActivaId  = null;
+    let sesionActiva    = null;
+
+    function loadSesion() {
+      onSnapshot(collection(db, 'sesiones'), snap => {
+        sesionesData = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a,b) => (a.orden||99) - (b.orden||99));
+        renderSesionesList();
+        if (sesionActivaId) {
+          sesionActiva = sesionesData.find(s => s.id === sesionActivaId) || null;
+          if (sesionActiva) renderSesionForm();
+        }
+      });
+    }
+
+    function renderSesionesList() {
+      const container = document.getElementById('sesiones-list-items');
+      if (sesionesData.length === 0) {
+        container.innerHTML = '<p class="empty-text">Sin sesiones creadas.</p>';
+        return;
+      }
+      container.innerHTML = sesionesData.map(s => `
+        <div class="paciente-item ${s.id === sesionActivaId ? 'paciente-item--active' : ''}"
+             onclick="seleccionarSesion('${s.id}')">
+          <div class="paciente-item__avatar" style="border-radius:8px">&#128172;</div>
+          <div>
+            <p class="paciente-item__nombre">${s.nombre || 'Sin nombre'}</p>
+            <p class="paciente-item__correo">$${(s.precio||0).toLocaleString('es-CL')} ${s.precioLabel||''}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.seleccionarSesion = function(id) {
+      sesionActivaId = id;
+      sesionActiva   = sesionesData.find(s => s.id === id);
+      renderSesionesList();
+      renderSesionForm();
+      document.getElementById('sesion-editor-empty').classList.add('hidden');
+      document.getElementById('sesion-editor').classList.remove('hidden');
+    };
+
+    function renderSesionForm() {
+      if (!sesionActiva) return;
+      document.getElementById('ses-form-titulo').textContent   = sesionActiva.nombre || 'Editar sesión';
+      document.getElementById('ses-etiqueta').value            = sesionActiva.etiqueta     || '';
+      document.getElementById('ses-nombre').value              = sesionActiva.nombre       || '';
+      document.getElementById('ses-descripcion').value         = sesionActiva.descripcion  || '';
+      document.getElementById('ses-precio').value              = sesionActiva.precio       || '';
+      document.getElementById('ses-precio-label').value        = sesionActiva.precioLabel  || '';
+      renderCaracteristicasList();
+      renderSesionPreview();
+    }
+
+    function actualizarPreviewLive() {
+      if (!sesionActiva) return;
+      sesionActiva.etiqueta     = document.getElementById('ses-etiqueta').value.trim();
+      sesionActiva.nombre       = document.getElementById('ses-nombre').value.trim();
+      sesionActiva.descripcion  = document.getElementById('ses-descripcion').value.trim();
+      sesionActiva.precio       = parseInt(document.getElementById('ses-precio').value) || 0;
+      sesionActiva.precioLabel  = document.getElementById('ses-precio-label').value.trim();
+      renderSesionPreview();
+    }
+
+    ['ses-etiqueta','ses-nombre','ses-descripcion','ses-precio','ses-precio-label'].forEach(id => {
+      document.getElementById(id).addEventListener('input', actualizarPreviewLive);
+    });
+
+    function renderCaracteristicasList() {
+      const container = document.getElementById('ses-caracteristicas-list');
+      const lista = sesionActiva?.caracteristicas || [];
+      container.innerHTML = lista.map((c, i) => `
+        <div class="caracteristica-row">
+          <span>&#10003; ${c}</span>
+          <button class="btn-action btn-action--cancel btn-sm" onclick="eliminarCaracteristica(${i})">&#10005;</button>
+        </div>
+      `).join('') || '<p class="empty-text" style="font-size:0.8rem">Sin características.</p>';
+    }
+
+    window.eliminarCaracteristica = function(idx) {
+      sesionActiva.caracteristicas.splice(idx, 1);
+      renderCaracteristicasList();
+      renderSesionPreview();
+    };
+
+    document.getElementById('btn-add-caracteristica').addEventListener('click', () => {
+      const input = document.getElementById('nueva-caracteristica');
+      const valor = input.value.trim();
+      if (!valor || !sesionActiva) return;
+      sesionActiva.caracteristicas = sesionActiva.caracteristicas || [];
+      sesionActiva.caracteristicas.push(valor);
+      input.value = '';
+      renderCaracteristicasList();
+      renderSesionPreview();
+    });
+    document.getElementById('nueva-caracteristica').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('btn-add-caracteristica').click();
+    });
+
+    function renderSesionPreview() {
+      if (!sesionActiva) return;
+      const precio = (sesionActiva.precio || 0).toLocaleString('es-CL');
+      document.getElementById('sesion-card-preview').innerHTML = `
+        <div class="preview-card">
+          <div class="preview-card__header">${sesionActiva.etiqueta || 'SESIÓN ONLINE'}</div>
+          <div class="preview-card__body">
+            <div class="preview-card__icon">&#128172;</div>
+            <h4>${sesionActiva.nombre || 'Sesión'}</h4>
+            ${sesionActiva.descripcion ? `<p class="preview-card__desc">${sesionActiva.descripcion}</p>` : ''}
+            <div class="preview-card__precio"><span class="preview-card__signo">$</span>${precio}</div>
+            <p class="preview-card__precio-label">${sesionActiva.precioLabel || 'CLP / sesión'}</p>
+            <ul class="preview-card__features">
+              ${(sesionActiva.caracteristicas || []).map(c => `<li>&#10003; ${c}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('btn-guardar-sesion').addEventListener('click', async () => {
+      if (!sesionActiva || !sesionActivaId) return;
+      actualizarPreviewLive();
+      await setDoc(doc(db, 'sesiones', sesionActivaId), sesionActiva);
+      const ok = document.getElementById('save-ok-sesion');
+      ok.classList.remove('hidden');
+      setTimeout(() => ok.classList.add('hidden'), 3000);
+    });
+
+    document.getElementById('btn-nueva-sesion').addEventListener('click', async () => {
+      const nueva = {
+        etiqueta: 'NUEVA SESIÓN', nombre: 'Nueva Sesión',
+        descripcion: '', precio: 0, precioLabel: 'CLP / sesión',
+        caracteristicas: [], orden: sesionesData.length
+      };
+      const ref = doc(collection(db, 'sesiones'));
+      await setDoc(ref, nueva);
+      seleccionarSesion(ref.id);
+    });
+
+    document.getElementById('btn-eliminar-sesion').addEventListener('click', async () => {
+      if (!sesionActivaId) return;
+      if (!confirm(`¿Eliminar la sesión "${sesionActiva?.nombre}"?`)) return;
+      await deleteDoc(doc(db, 'sesiones', sesionActivaId));
+      sesionActivaId = null; sesionActiva = null;
+      document.getElementById('sesion-editor-empty').classList.remove('hidden');
+      document.getElementById('sesion-editor').classList.add('hidden');
+    });
+
+    window.irACitas = function() {
+      document.querySelectorAll('.sidebar__link').forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('[data-section="citas"]').classList.add('active');
+      document.getElementById('panel-citas').classList.add('active');
+      document.getElementById('topbar-title').textContent = 'Citas';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // ── SECCIÓN COMENTARIOS ──
+    let correosBloqueados = new Set();
+
+    // Escuchar bloqueados en tiempo real
+    onSnapshot(collection(db, 'bloqueados'), (snap) => {
+      correosBloqueados = new Set(snap.docs.map(d => d.id));
+      // Refrescar UI si la sección está visible
+      const lista = document.getElementById('comentarios-list');
+      if (lista && lista.querySelector('.comentario-card')) loadComentarios();
+    });
+
+    function loadComentarios() {
+      const q = query(collection(db, 'comentarios'), orderBy('fecha', 'desc'));
+      onSnapshot(q, (snapshot) => {
+        document.getElementById('stat-comentarios').textContent = snapshot.size;
+        const container = document.getElementById('comentarios-list');
+
+        if (snapshot.empty) {
+          container.innerHTML = '<p class="empty-text">No hay comentarios aún.</p>';
+          return;
+        }
+
+        container.innerHTML = snapshot.docs.map(d => {
+          const c      = d.data();
+          const bloqueado = correosBloqueados.has(c.correo);
+          const fecha  = c.fecha?.toDate
+            ? c.fecha.toDate().toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })
+            : '—';
+          return `
+            <div class="comentario-card ${bloqueado ? 'comentario-card--bloqueado' : ''}" id="com-${d.id}">
+              <div class="comentario-card__header">
+                <div class="comentario-card__avatar">${c.nombre.charAt(0).toUpperCase()}</div>
+                <div class="comentario-card__meta">
+                  <p class="comentario-card__name">${c.nombre}
+                    ${bloqueado ? '<span class="badge badge--cancelada">Bloqueado</span>' : ''}
+                  </p>
+                  <p class="comentario-card__email">${c.correo}</p>
+                  <p class="comentario-card__date">${fecha}</p>
+                </div>
+              </div>
+              <p class="comentario-card__text">${c.comentario}</p>
+              <div class="comentario-card__actions" id="com-actions-${d.id}">
+                <button class="btn-action btn-action--cancel" onclick="eliminarComentario('${d.id}')">
+                  &#10005; Eliminar
+                </button>
+                ${bloqueado
+                  ? `<button class="btn-action btn-action--restore" onclick="toggleBloqueo('${c.correo}', false)">&#128275; Desbloquear usuario</button>`
+                  : `<button class="btn-action btn-action--block"   onclick="toggleBloqueo('${c.correo}', true)">&#128274; Bloquear usuario</button>`
+                }
+              </div>
+            </div>
+          `;
+        }).join('');
+      });
+    }
+
+    window.toggleBloqueo = function(correo, bloquear) {
+      const msg = bloquear
+        ? `¿Bloquear a ${correo}? No podrá enviar más comentarios.`
+        : `¿Desbloquear a ${correo}? Podrá volver a comentar.`;
+
+      // Buscar la card que contiene este correo para mostrar el diálogo inline
+      const cards = document.querySelectorAll('.comentario-card');
+      let targetCard = null;
+      cards.forEach(card => {
+        if (card.querySelector('.comentario-card__email')?.textContent === correo) {
+          targetCard = card;
+        }
+      });
+      if (!targetCard) return;
+
+      const actions = targetCard.querySelector('.comentario-card__actions');
+      if (targetCard.querySelector('.cita-confirm')) return;
+
+      const dialogo = document.createElement('div');
+      dialogo.className = 'cita-confirm';
+      dialogo.innerHTML = `
+        <p class="cita-confirm__msg">${msg}</p>
+        <div class="cita-confirm__btns">
+          <button class="btn-action ${bloquear ? 'btn-action--cancel' : 'btn-action--confirm'}" id="blq-yes">
+            ${bloquear ? '&#128274; Sí, bloquear' : '&#128275; Sí, desbloquear'}
+          </button>
+          <button class="btn-action btn-action--restore" id="blq-no">No, volver</button>
+        </div>
+      `;
+      actions.style.display = 'none';
+      targetCard.appendChild(dialogo);
+
+      dialogo.querySelector('#blq-yes').addEventListener('click', async () => {
+        try {
+          if (bloquear) {
+            // Usamos el correo como ID del documento para fácil lookup
+            await setDoc(doc(db, 'bloqueados', correo), { correo, bloqueadoEn: new Date() });
+          } else {
+            await deleteDoc(doc(db, 'bloqueados', correo));
+          }
+        } catch (e) {
+          console.error('Error al cambiar bloqueo:', e);
+        }
+        dialogo.remove();
+        actions.style.display = '';
+      });
+
+      dialogo.querySelector('#blq-no').addEventListener('click', () => {
+        dialogo.remove();
+        actions.style.display = '';
+      });
+    };
+
+    window.eliminarComentario = function(id) {
+      const card    = document.getElementById(`com-${id}`);
+      const actions = document.getElementById(`com-actions-${id}`);
+      if (card.querySelector('.cita-confirm')) return;
+
+      const dialogo = document.createElement('div');
+      dialogo.className = 'cita-confirm';
+      dialogo.innerHTML = `
+        <p class="cita-confirm__msg">¿Estás seguro de que deseas eliminar este comentario?</p>
+        <div class="cita-confirm__btns">
+          <button class="btn-action btn-action--cancel"  id="del-yes-${id}">Sí, eliminar</button>
+          <button class="btn-action btn-action--restore" id="del-no-${id}">No, volver</button>
+        </div>
+      `;
+      actions.style.display = 'none';
+      card.appendChild(dialogo);
+
+      document.getElementById(`del-yes-${id}`).addEventListener('click', async () => {
+        try {
+          await deleteDoc(doc(db, 'comentarios', id));
+        } catch (e) {
+          console.error('Error eliminando comentario:', e);
+        }
+      });
+
+      document.getElementById(`del-no-${id}`).addEventListener('click', () => {
+        dialogo.remove();
+        actions.style.display = '';
+      });
+    };
+
+    function formatFecha(iso) {
+      if (!iso) return '—';
+      const [y, m, d] = iso.split('-');
+      const fecha = new Date(y, m - 1, d);
+      return fecha.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  </script>
+</body>
+</html>
