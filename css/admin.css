@@ -537,7 +537,66 @@ body {
 .btn-action:active  { transform: scale(0.97); }
 .btn-action--confirm { background: var(--primary); color: #fff; }
 .btn-action--cancel  { background: rgba(231,76,60,0.1); color: var(--danger); }
-.btn-action--restore { background: rgba(59,168,154,0.1); color: var(--primary-dark); }
+.btn-action--restore   { background: rgba(59,168,154,0.1);  color: var(--primary-dark); }
+.btn-action--reagendar { background: rgba(52,152,219,0.12); color: #2980b9; }
+
+/* Reagendar panel */
+.reagendar-panel { border-top: 1px solid var(--border); }
+.reagendar-content {
+  padding: 1rem 1.25rem;
+  background: #f8fbff;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0.75rem 1.25rem;
+  align-items: start;
+}
+.reagendar-title {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+.reagendar-cal-wrap {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--white);
+}
+.reagendar-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.reagendar-btns {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+/* Calendario compacto dentro del panel reagendar */
+.reagendar-cal-wrap .ag-cal-header {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.82rem;
+}
+.reagendar-cal-wrap .ag-cal-dias-semana {
+  font-size: 0.68rem;
+  padding: 0.25rem 0.3rem 0;
+}
+.reagendar-cal-wrap .ag-cal-grid {
+  gap: 1px;
+  padding: 0.3rem;
+}
+.reagendar-cal-wrap .ag-day {
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+.reagendar-right .ag-slots-section { margin: 0; }
+.reagendar-right .ag-slots-section label { font-size: 0.78rem; margin-bottom: 0.35rem; }
+.reagendar-right .ag-slots-grid { gap: 0.3rem; }
+.reagendar-right .ag-slot { padding: 0.28rem 0.55rem; font-size: 0.76rem; }
+.reagendar-right .ag-resumen { font-size: 0.82rem; padding: 0.5rem 0.75rem; }
 .btn-action--block   { background: rgba(90,90,90,0.1);  color: #555; }
 
 .comentario-card--bloqueado { opacity: 0.7; border-left: 3px solid var(--danger); }
@@ -994,6 +1053,35 @@ body {
 }
 .modal-box h3 { font-family: 'Poppins', sans-serif; margin-bottom: 1.25rem; }
 .modal-box__btns { display: flex; gap: 0.5rem; margin-top: 1rem; }
+
+/* ── TRAMOS HORARIOS ── */
+.tramos-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.tramo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.tramo-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+.tramo-field input[type="time"],
+.tramo-field select {
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-family: 'Inter', sans-serif;
+  background: var(--white);
+}
+.tramo-field input:focus,
+.tramo-field select:focus { outline: none; border-color: var(--primary); }
 
 /* ── AGENDAR ADMIN ── */
 .agendar-admin-layout { max-width: 560px; }

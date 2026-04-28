@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('_YEYx8c7O4wlhaK5k');</script>
   <title>Panel de Administración — Psic. Ariel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -158,6 +160,34 @@
 
         <!-- Calendario -->
         <section class="panel" id="panel-calendario">
+
+          <!-- Configuración de tramos -->
+          <div class="cal-section">
+            <h3 class="cal-section__title">Configuración de tramos horarios</h3>
+            <p class="cal-section__sub">Define el rango y la duración de cada sesión. Se aplica a todos los días.</p>
+            <div class="tramos-form">
+              <div class="tramo-field">
+                <label>Hora inicio</label>
+                <input type="time" id="tramo-inicio" value="09:00">
+              </div>
+              <div class="tramo-field">
+                <label>Hora fin</label>
+                <input type="time" id="tramo-fin" value="18:00">
+              </div>
+              <div class="tramo-field">
+                <label>Duración de sesión</label>
+                <select id="tramo-intervalo">
+                  <option value="30">30 minutos</option>
+                  <option value="45">45 minutos</option>
+                  <option value="60" selected>60 minutos (1 hora)</option>
+                  <option value="90">90 minutos</option>
+                  <option value="120">2 horas</option>
+                </select>
+              </div>
+              <button class="btn-save" id="btn-aplicar-tramos">&#8635; Aplicar y regenerar</button>
+            </div>
+            <p class="save-ok hidden" id="save-ok-tramos">&#10003; Tramos actualizados</p>
+          </div>
 
           <!-- Horario semanal -->
           <div class="cal-section">
@@ -653,6 +683,9 @@
                 </button>
               ` : ''}
               ${c.estado !== 'cancelada' ? `
+                <button class="btn-action btn-action--reagendar" onclick="abrirReagendar('${c.id}')">
+                  &#128197; Reagendar
+                </button>
                 <button class="btn-action btn-action--cancel" onclick="cambiarEstado('${c.id}', 'cancelada')">
                   &#10005; Cancelar
                 </button>
@@ -663,6 +696,7 @@
                 </button>
               ` : ''}
             </div>
+            <div class="reagendar-panel hidden" id="reagendar-${c.id}"></div>
           </div>
         `;
       }).join('');
@@ -672,6 +706,162 @@
       document.getElementById('stat-pendientes').textContent  = todasLasCitas.filter(c => c.estado === 'pendiente').length;
       document.getElementById('stat-confirmadas').textContent = todasLasCitas.filter(c => c.estado === 'confirmada').length;
       renderCitasPendientes(todasLasCitas.filter(c => c.estado === 'pendiente'));
+    }
+
+    // ── REAGENDAR ──
+    const reagendarState = {};
+
+    window.abrirReagendar = async function(citaId) {
+      document.querySelectorAll('.reagendar-panel').forEach(p => {
+        if (p.id !== `reagendar-${citaId}`) p.classList.add('hidden');
+      });
+      const panel = document.getElementById(`reagendar-${citaId}`);
+      if (!panel.classList.contains('hidden')) { panel.classList.add('hidden'); return; }
+
+      reagendarState[citaId] = { fecha: null, hora: null, mes: new Date().getMonth(), año: new Date().getFullYear() };
+      panel.classList.remove('hidden');
+      panel.innerHTML = `
+        <div class="reagendar-content">
+          <p class="reagendar-title">&#128197; Selecciona nueva fecha y horario</p>
+          <div class="reagendar-cal-wrap">
+            <div class="ag-cal-header">
+              <button class="ag-cal-nav" onclick="reagendarNavMes('${citaId}',-1)">&#8249;</button>
+              <span id="rg-mes-${citaId}"></span>
+              <button class="ag-cal-nav" onclick="reagendarNavMes('${citaId}',1)">&#8250;</button>
+            </div>
+            <div class="ag-cal-dias-semana">
+              <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span>
+              <span>Jue</span><span>Vie</span><span>Sáb</span>
+            </div>
+            <div class="ag-cal-grid" id="rg-grid-${citaId}"></div>
+          </div>
+          <div class="reagendar-right">
+            <div class="ag-slots-section hidden" id="rg-slots-${citaId}">
+              <label>Nuevo horario</label>
+              <div class="ag-slots-grid" id="rg-slots-grid-${citaId}"></div>
+            </div>
+            <div class="ag-resumen hidden" id="rg-resumen-${citaId}">
+              <p>&#128197; <span id="rg-res-fecha-${citaId}"></span> &nbsp; &#128336; <span id="rg-res-hora-${citaId}"></span></p>
+            </div>
+            <p class="ag-error hidden" id="rg-error-${citaId}"></p>
+            <div class="reagendar-btns">
+              <button class="btn-save" onclick="confirmarReagendar('${citaId}')">&#10003; Confirmar</button>
+              <button class="btn-action btn-action--cancel" onclick="document.getElementById('reagendar-${citaId}').classList.add('hidden')">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      `;
+      await renderReagendarCal(citaId);
+    };
+
+    window.reagendarNavMes = async function(citaId, dir) {
+      reagendarState[citaId].mes += dir;
+      if (reagendarState[citaId].mes < 0)  { reagendarState[citaId].mes = 11; reagendarState[citaId].año--; }
+      if (reagendarState[citaId].mes > 11) { reagendarState[citaId].mes = 0;  reagendarState[citaId].año++; }
+      await renderReagendarCal(citaId);
+    };
+
+    async function renderReagendarCal(citaId) {
+      const s    = reagendarState[citaId];
+      const grid = document.getElementById(`rg-grid-${citaId}`);
+      const lbl  = document.getElementById(`rg-mes-${citaId}`);
+      if (!grid) return;
+      lbl.textContent = `${MESES[s.mes]} ${s.año}`;
+      grid.innerHTML  = '';
+      const hoy      = new Date(); hoy.setHours(0,0,0,0);
+      const firstDay = new Date(s.año, s.mes, 1).getDay();
+      const total    = new Date(s.año, s.mes + 1, 0).getDate();
+      const horarioSnap    = await getDoc(doc(db, 'configuracion', 'horarios'));
+      const horario        = horarioSnap.exists() ? horarioSnap.data() : null;
+      const bloqueadosSnap = await getDocs(collection(db, 'diasBloqueados'));
+      const bloqueados     = {};
+      bloqueadosSnap.docs.forEach(d => { bloqueados[d.id] = d.data(); });
+      for (let i = 0; i < firstDay; i++) {
+        const e = document.createElement('div'); e.className = 'ag-day ag-day--empty'; grid.appendChild(e);
+      }
+      for (let d = 1; d <= total; d++) {
+        const fecha    = new Date(s.año, s.mes, d);
+        const fechaISO = `${s.año}-${String(s.mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const btn = document.createElement('button');
+        btn.className = 'ag-day'; btn.textContent = d;
+        const diaNombre = DIAS_IDX_MAP[fecha.getDay()];
+        const isPast    = fecha < hoy;
+        const todoElDia = bloqueados[fechaISO]?.todoElDia;
+        const inactivo  = horario && (!horario[diaNombre] || !horario[diaNombre].activo);
+        if (isPast || todoElDia || inactivo) { btn.classList.add('ag-day--disabled'); btn.disabled = true; }
+        else btn.addEventListener('click', () => seleccionarFechaReagendar(citaId, fecha, fechaISO, btn, horario, bloqueados[fechaISO]));
+        if (s.fecha === fechaISO) btn.classList.add('ag-day--selected');
+        grid.appendChild(btn);
+      }
+    }
+
+    async function seleccionarFechaReagendar(citaId, fecha, fechaISO, btn, horario, bloqueo) {
+      reagendarState[citaId].fecha = fechaISO;
+      reagendarState[citaId].hora  = null;
+      document.querySelectorAll(`#rg-grid-${citaId} .ag-day--selected`).forEach(b => b.classList.remove('ag-day--selected'));
+      btn.classList.add('ag-day--selected');
+      const diaNombre = DIAS_IDX_MAP[fecha.getDay()];
+      let slots = horario?.[diaNombre]?.slots || SLOTS_DISPONIBLES;
+      slots = slots.filter(s => !(bloqueo?.horasBloqueadas || []).includes(s));
+      const citasSnap = await getDocs(collection(db, 'citas'));
+      const ocupadas  = citasSnap.docs.filter(d => d.id !== citaId).map(d => d.data()).filter(c => c.fecha === fechaISO && c.estado !== 'cancelada').map(c => c.hora);
+      const libres    = slots.filter(s => !ocupadas.includes(s)).sort();
+      const slotsGrid = document.getElementById(`rg-slots-grid-${citaId}`);
+      slotsGrid.innerHTML = libres.length === 0
+        ? '<p class="empty-text">Sin horarios disponibles.</p>'
+        : libres.map(sl => `<button class="ag-slot" onclick="seleccionarHoraReagendar('${citaId}','${sl}',this)">${sl}</button>`).join('');
+      document.getElementById(`rg-slots-${citaId}`).classList.remove('hidden');
+      document.getElementById(`rg-resumen-${citaId}`).classList.add('hidden');
+    }
+
+    window.seleccionarHoraReagendar = function(citaId, hora, btn) {
+      reagendarState[citaId].hora = hora;
+      document.querySelectorAll(`#rg-slots-grid-${citaId} .ag-slot--selected`).forEach(b => b.classList.remove('ag-slot--selected'));
+      btn.classList.add('ag-slot--selected');
+      const [y,m,d] = reagendarState[citaId].fecha.split('-').map(Number);
+      document.getElementById(`rg-res-fecha-${citaId}`).textContent = new Date(y,m-1,d).toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+      document.getElementById(`rg-res-hora-${citaId}`).textContent  = hora;
+      document.getElementById(`rg-resumen-${citaId}`).classList.remove('hidden');
+    };
+
+    window.confirmarReagendar = async function(citaId) {
+      const s     = reagendarState[citaId];
+      const error = document.getElementById(`rg-error-${citaId}`);
+      error.classList.add('hidden');
+      if (!s.fecha) { error.textContent = 'Selecciona una fecha.';   error.classList.remove('hidden'); return; }
+      if (!s.hora)  { error.textContent = 'Selecciona un horario.';  error.classList.remove('hidden'); return; }
+      try {
+        const cita = todasLasCitas.find(c => c.id === citaId);
+        await updateDoc(doc(db, 'citas', citaId), { fecha: s.fecha, hora: s.hora });
+        document.getElementById(`reagendar-${citaId}`).classList.add('hidden');
+        if (cita) {
+          emailPaciente(
+            cita.correo, cita.nombre,
+            'Tu cita ha sido reagendada',
+            'Tu cita ha sido reagendada para una nueva fecha.',
+            cita.plan || 'Sesión Individual', s.fecha, s.hora
+          );
+        }
+      } catch(e) {
+        error.textContent = 'Error al reagendar.';
+        error.classList.remove('hidden');
+      }
+    };
+
+    // ── EMAIL JS ──
+    const EJS_SERVICE  = 'service_u1b7kus';
+    const EJS_PACIENTE = 'template_hp7oni9';
+
+    function emailPaciente(correo, nombre, subject, intro, session_type, date, time) {
+      emailjs.send(EJS_SERVICE, EJS_PACIENTE, {
+        patient_email: correo,
+        patient_name:  nombre,
+        subject,
+        intro,
+        session_type: session_type || '',
+        date:         date         || '',
+        time:         time         || ''
+      }).catch(e => console.error('EmailJS:', e));
     }
 
     window.cambiarEstado = function(id, nuevoEstado) {
@@ -703,6 +893,25 @@
         actions.style.display = '';
         try {
           await updateDoc(doc(db, 'citas', id), { estado: nuevoEstado });
+          // Enviar email al paciente según el nuevo estado
+          const cita = todasLasCitas.find(c => c.id === id);
+          if (cita) {
+            if (nuevoEstado === 'confirmada') {
+              emailPaciente(
+                cita.correo, cita.nombre,
+                'Tu cita ha sido confirmada ✓',
+                'Tu cita ha sido confirmada. Te espero.',
+                cita.plan || 'Sesión Individual', cita.fecha, cita.hora
+              );
+            } else if (nuevoEstado === 'cancelada') {
+              emailPaciente(
+                cita.correo, cita.nombre,
+                'Tu cita ha sido cancelada',
+                'Tu cita ha sido cancelada. Si deseas reagendar no dudes en contactarme.',
+                cita.plan || 'Sesión Individual', cita.fecha, cita.hora
+              );
+            }
+          }
         } catch (e) {
           console.error('Error actualizando cita:', e);
         }
@@ -728,7 +937,22 @@
     const DIAS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
     const DIAS_LABEL = { lunes:'Lunes', martes:'Martes', miercoles:'Miércoles',
                          jueves:'Jueves', viernes:'Viernes', sabado:'Sábado', domingo:'Domingo' };
-    const SLOTS_DISPONIBLES = ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'];
+    let SLOTS_DISPONIBLES = generarSlots('09:00', '18:00', 60);
+
+    function generarSlots(inicio, fin, intervaloMin) {
+      const slots = [];
+      const [hI, mI] = inicio.split(':').map(Number);
+      const [hF, mF] = fin.split(':').map(Number);
+      let minActual = hI * 60 + mI;
+      const minFin  = hF * 60 + mF;
+      while (minActual < minFin) {
+        const h = String(Math.floor(minActual / 60)).padStart(2, '0');
+        const m = String(minActual % 60).padStart(2, '0');
+        slots.push(`${h}:${m}`);
+        minActual += intervaloMin;
+      }
+      return slots;
+    }
 
     const HORARIO_DEFAULT = {};
     DIAS.forEach(d => {
@@ -741,8 +965,41 @@
     let horarioActual = JSON.parse(JSON.stringify(HORARIO_DEFAULT));
 
     function loadCalendario() {
-      // Cargar horario semanal
       import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(({ getDoc, doc: fsDoc, setDoc, deleteDoc, onSnapshot, collection }) => {
+
+        // Cargar config de tramos
+        getDoc(fsDoc(db, 'configuracion', 'tramos')).then(snap => {
+          if (snap.exists()) {
+            const t = snap.data();
+            document.getElementById('tramo-inicio').value    = t.inicio    || '09:00';
+            document.getElementById('tramo-fin').value       = t.fin       || '18:00';
+            document.getElementById('tramo-intervalo').value = String(t.intervalo || 60);
+            SLOTS_DISPONIBLES = generarSlots(t.inicio || '09:00', t.fin || '18:00', parseInt(t.intervalo) || 60);
+          }
+        });
+
+        // Aplicar y guardar tramos
+        document.getElementById('btn-aplicar-tramos').addEventListener('click', async () => {
+          const inicio    = document.getElementById('tramo-inicio').value;
+          const fin       = document.getElementById('tramo-fin').value;
+          const intervalo = parseInt(document.getElementById('tramo-intervalo').value);
+          if (!inicio || !fin || inicio >= fin) {
+            alert('La hora de inicio debe ser menor a la hora fin.');
+            return;
+          }
+          SLOTS_DISPONIBLES = generarSlots(inicio, fin, intervalo);
+          DIAS.forEach(dia => {
+            if (horarioActual[dia]?.activo) horarioActual[dia].slots = [...SLOTS_DISPONIBLES];
+          });
+          await setDoc(fsDoc(db, 'configuracion', 'tramos'), { inicio, fin, intervalo });
+          await setDoc(fsDoc(db, 'configuracion', 'horarios'), horarioActual);
+          renderHorarioSemanal();
+          const ok = document.getElementById('save-ok-tramos');
+          ok.classList.remove('hidden');
+          setTimeout(() => ok.classList.add('hidden'), 3000);
+        });
+
+        // Cargar horario semanal
         getDoc(fsDoc(db, 'configuracion', 'horarios')).then(snap => {
           if (snap.exists()) horarioActual = snap.data();
           renderHorarioSemanal();
@@ -1246,6 +1503,15 @@
           creadaEn:  serverTimestamp(),
           agendadoPor: 'admin'
         });
+
+        // Enviar correo de confirmación al paciente
+        emailPaciente(
+          correo, nombre,
+          'Tu cita ha sido agendada ✓',
+          'Tu cita ha sido agendada y confirmada.',
+          'Sesión Individual', agState.fecha, agState.hora
+        );
+
         // Resetear
         ['ag-nombre','ag-correo','ag-telefono','ag-motivo'].forEach(id => document.getElementById(id).value = '');
         agState.fecha = null; agState.hora = null;

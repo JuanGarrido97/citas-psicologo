@@ -283,7 +283,7 @@ function initBookingForm() {
     input.addEventListener('input', updateBookingSummary);
   });
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     const note = document.getElementById('booking-required-note');
     if (!validateBooking()) {
@@ -292,8 +292,8 @@ function initBookingForm() {
     }
     note.classList.add('hidden');
 
-    // Recolectar datos del formulario
-    const datos = {
+    // Guardar datos en estado global para usarlos al confirmar el pago
+    bookingState.datosPaciente = {
       nombre:   document.getElementById('patient-name').value.trim(),
       correo:   document.getElementById('patient-email').value.trim(),
       telefono: document.getElementById('patient-phone').value.trim(),
@@ -305,16 +305,6 @@ function initBookingForm() {
       hora:     bookingState.selectedTime,
     };
 
-    // Guardar en Firebase (window.guardarCita viene del módulo en index.html)
-    if (typeof window.guardarCita === 'function') {
-      const resultado = await window.guardarCita(datos);
-      if (!resultado.ok) {
-        showAlert('Hubo un problema al registrar tu cita. Intenta nuevamente.');
-        return;
-      }
-    }
-
-    // Si se guardó bien, abrir modal de pago
     openPaymentModal();
   });
 }
@@ -497,13 +487,20 @@ function processPayment() {
   btn.textContent = 'Procesando...';
   btn.disabled = true;
 
-  // Simular procesamiento
-  setTimeout(() => {
+  setTimeout(async () => {
     document.getElementById('payment-form-section').style.display = 'none';
     document.getElementById('payment-success').classList.add('active');
-
     btn.innerHTML = '<span class="btn-lock">&#128274;</span> Pagar Ahora';
     btn.disabled = false;
+
+    // Guardar cita y enviar correos solo al confirmar el pago
+    if (bookingState.datosPaciente && typeof window.guardarCita === 'function') {
+      const resultado = await window.guardarCita(bookingState.datosPaciente);
+      if (!resultado.ok) {
+        console.error('Error guardando cita tras pago');
+      }
+      bookingState.datosPaciente = null;
+    }
   }, 2000);
 }
 

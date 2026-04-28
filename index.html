@@ -6,6 +6,8 @@
   <meta name="description" content="Psicólogo Ariel Ignacio Cáceres Saravia. Psicoterapia online con más de 12 años de experiencia. Atención confidencial, respetuosa y comprometida con tu proceso.">
   <title>Psicólogo Ariel Ignacio Cáceres Saravia | Psicoterapia Online</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('_YEYx8c7O4wlhaK5k');</script>
 </head>
 <body>
 
@@ -612,6 +614,44 @@
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
+    const EJS_SERVICE  = 'service_u1b7kus';
+    const EJS_ADMIN    = 'template_bspjy2b';
+    const EJS_PACIENTE = 'template_hp7oni9';
+
+    function enviarEmailAdmin(datos) {
+      return emailjs.send(EJS_SERVICE, EJS_ADMIN, {
+        patient_name:  datos.nombre,
+        patient_email: datos.correo,
+        patient_phone: datos.telefono,
+        session_type:  datos.plan,
+        date:          datos.fecha,
+        time:          datos.hora,
+        reason:        datos.motivo || '—'
+      });
+    }
+
+    function enviarEmailPaciente(correo, nombre, subject, intro, session_type, date, time) {
+      return emailjs.send(EJS_SERVICE, EJS_PACIENTE, {
+        patient_email: correo,
+        patient_name:  nombre,
+        subject,
+        intro,
+        session_type: session_type || '',
+        date:         date         || '',
+        time:         time         || ''
+      });
+    }
+
+    window.notificarNuevaCita = function(datos) {
+      enviarEmailAdmin(datos).catch(e => console.error('Email admin:', e));
+      enviarEmailPaciente(
+        datos.correo, datos.nombre,
+        'Hemos recibido tu solicitud de cita',
+        'Tu solicitud de cita ha sido recibida correctamente. Te confirmaré a la brevedad.',
+        datos.plan, datos.fecha, datos.hora
+      ).catch(e => console.error('Email paciente:', e));
+    };
+
     // Cargar sesiones en el formulario de reserva
     getDocs(collection(db, 'sesiones')).then(snap => {
       const container = document.getElementById('session-options');
@@ -857,15 +897,19 @@
       try {
         await addDoc(collection(db, 'citas'), {
           nombre:  datos.nombre,
-          correo:  datos.correo,       // clave de relación con comentarios
+          correo:  datos.correo,
           telefono: datos.telefono,
           motivo:  datos.motivo,
           plan:    datos.plan,
           fecha:   datos.fecha,
           hora:    datos.hora,
-          estado:  'pendiente',        // pendiente | confirmada | cancelada
+          estado:  'pendiente',
           creadaEn: serverTimestamp()
         });
+        // Enviar correos de notificación
+        if (typeof window.notificarNuevaCita === 'function') {
+          window.notificarNuevaCita(datos);
+        }
         return { ok: true };
       } catch (error) {
         console.error('Error guardando cita:', error);
