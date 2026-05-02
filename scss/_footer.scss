@@ -156,6 +156,17 @@
     color: rgba($color-white, 0.4);
   }
 
+  .footer__dev-link {
+    color: $color-primary-light;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-white;
+    }
+  }
+
   a {
     color: rgba($color-white, 0.4);
 

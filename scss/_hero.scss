@@ -137,10 +137,9 @@
   width: 380px;
   height: 380px;
   border-radius: $border-radius-full;
-  background: linear-gradient(135deg, $color-primary-light, $color-primary);
+  background: transparent;
   @include flex-center;
   position: relative;
-  overflow: hidden;
 
   @include mobile {
     width: 250px;
@@ -152,6 +151,8 @@
     height: 100%;
     object-fit: cover;
     border-radius: $border-radius-full;
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 80%);
   }
 
   .placeholder-img {

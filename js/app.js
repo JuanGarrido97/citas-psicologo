@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   initScrollEffects();
+  initTrajectory();
   initCalendar();
   initBookingForm();
   initPaymentForm();
@@ -110,6 +111,13 @@ function initScrollEffects() {
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+// ============================================
+// TRAYECTORIA — expandir/colapsar al hacer click
+// ============================================
+function initTrajectory() {
+  // Solo visual, sin interacción
 }
 
 // ============================================
@@ -482,26 +490,64 @@ function closePaymentModal() {
   document.getElementById('card-expiry-display').textContent = 'MM/AA';
 }
 
-function processPayment() {
+// URL de la API — cambiar cuando se despliegue en Railway/Render
+const API_URL = 'http://localhost:4000';
+
+async function processPayment() {
   const btn = document.querySelector('.payment__btn');
   btn.textContent = 'Procesando...';
   btn.disabled = true;
 
-  setTimeout(async () => {
-    document.getElementById('payment-form-section').style.display = 'none';
-    document.getElementById('payment-success').classList.add('active');
+  if (!bookingState.datosPaciente) {
     btn.innerHTML = '<span class="btn-lock">&#128274;</span> Pagar Ahora';
     btn.disabled = false;
+    return;
+  }
 
-    // Guardar cita y enviar correos solo al confirmar el pago
-    if (bookingState.datosPaciente && typeof window.guardarCita === 'function') {
-      const resultado = await window.guardarCita(bookingState.datosPaciente);
-      if (!resultado.ok) {
-        console.error('Error guardando cita tras pago');
-      }
-      bookingState.datosPaciente = null;
+  try {
+    const datos = bookingState.datosPaciente;
+
+    const res = await fetch(`${API_URL}/api/pago/iniciar`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre:   datos.nombre,
+        correo:   datos.correo,
+        telefono: datos.telefono,
+        motivo:   datos.motivo,
+        plan:     datos.plan,
+        precio:   bookingState.planPrice,
+        fecha:    datos.fecha,
+        hora:     datos.hora,
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.url || !data.token) {
+      throw new Error('Respuesta inválida del servidor');
     }
-  }, 2000);
+
+    bookingState.datosPaciente = null;
+
+    // Redirigir a Webpay
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = data.url;
+    const input = document.createElement('input');
+    input.type  = 'hidden';
+    input.name  = 'token_ws';
+    input.value = data.token;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+
+  } catch (error) {
+    console.error('Error iniciando pago:', error);
+    btn.innerHTML = '<span class="btn-lock">&#128274;</span> Pagar Ahora';
+    btn.disabled = false;
+    showAlert('Error al conectar con el sistema de pago. Intenta nuevamente.');
+  }
 }
 
 // ============================================
