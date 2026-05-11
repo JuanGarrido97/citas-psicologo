@@ -291,7 +291,7 @@ function initBookingForm() {
     input.addEventListener('input', updateBookingSummary);
   });
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const note = document.getElementById('booking-required-note');
     if (!validateBooking()) {
@@ -300,8 +300,7 @@ function initBookingForm() {
     }
     note.classList.add('hidden');
 
-    // Guardar datos en estado global para usarlos al confirmar el pago
-    bookingState.datosPaciente = {
+    const datos = {
       nombre:   document.getElementById('patient-name').value.trim(),
       correo:   document.getElementById('patient-email').value.trim(),
       telefono: document.getElementById('patient-phone').value.trim(),
@@ -313,7 +312,29 @@ function initBookingForm() {
       hora:     bookingState.selectedTime,
     };
 
-    openPaymentModal();
+    const btn = document.getElementById('booking-submit');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+
+    try {
+      if (typeof window.guardarCita === 'function') {
+        await window.guardarCita(datos);
+      }
+      openPaymentModal();
+      form.reset();
+      bookingState.selectedDate = null;
+      bookingState.selectedTime = null;
+      bookingState.selectedPlan = null;
+      bookingState.planName = '';
+      bookingState.planPrice = 0;
+      if (typeof updateBookingSummary === 'function') updateBookingSummary();
+    } catch (err) {
+      console.error('Error al guardar cita:', err);
+      showAlert('Ocurrió un error al guardar tu cita. Intenta nuevamente.');
+    } finally {
+      btn.textContent = 'Confirmar Cita';
+      btn.disabled = false;
+    }
   });
 }
 
@@ -401,79 +422,17 @@ function selectPlan(planId, planName, planPrice) {
 }
 
 // ============================================
-// PAGO SIMULADO
+// MODAL DE CONFIRMACIÓN
 // ============================================
 function initPaymentForm() {
-  const cardNumber = document.getElementById('card-number');
-  const cardName = document.getElementById('card-name');
-  const cardExpiry = document.getElementById('card-expiry');
-  const cardCvv = document.getElementById('card-cvv');
-  const paymentForm = document.getElementById('payment-form');
-
-  // Formatear número de tarjeta
-  cardNumber.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/\D/g, '');
-    value = value.replace(/(.{4})/g, '$1 ').trim();
-    e.target.value = value;
-
-    // Actualizar visual
-    document.getElementById('card-display').textContent =
-      value || '**** **** **** ****';
-  });
-
-  // Actualizar nombre en visual
-  cardName.addEventListener('input', (e) => {
-    document.getElementById('card-name-display').textContent =
-      e.target.value.toUpperCase() || 'TU NOMBRE';
-  });
-
-  // Formatear fecha de vencimiento
-  cardExpiry.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length >= 2) {
-      value = value.substring(0, 2) + '/' + value.substring(2);
-    }
-    e.target.value = value;
-
-    document.getElementById('card-expiry-display').textContent =
-      value || 'MM/AA';
-  });
-
-  // Solo números en CVV
-  cardCvv.addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/\D/g, '');
-  });
-
-  // Cerrar modal
   document.getElementById('payment-close').addEventListener('click', closePaymentModal);
   document.getElementById('payment-modal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
-      closePaymentModal();
-    }
-  });
-
-  // Submit pago
-  paymentForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    processPayment();
+    if (e.target === e.currentTarget) closePaymentModal();
   });
 }
 
 function openPaymentModal() {
   const modal = document.getElementById('payment-modal');
-
-  // Llenar resumen
-  document.getElementById('pay-plan').textContent = bookingState.planName;
-  document.getElementById('pay-date').textContent =
-    formatDate(bookingState.selectedDate);
-  document.getElementById('pay-time').textContent = bookingState.selectedTime;
-  document.getElementById('pay-total').textContent =
-    `$${bookingState.planPrice.toLocaleString()}`;
-
-  // Mostrar formulario, ocultar éxito
-  document.getElementById('payment-form-section').style.display = 'block';
-  document.getElementById('payment-success').classList.remove('active');
-
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -482,72 +441,6 @@ function closePaymentModal() {
   const modal = document.getElementById('payment-modal');
   modal.classList.remove('active');
   document.body.style.overflow = '';
-
-  // Resetear formulario de pago
-  document.getElementById('payment-form').reset();
-  document.getElementById('card-display').textContent = '**** **** **** ****';
-  document.getElementById('card-name-display').textContent = 'TU NOMBRE';
-  document.getElementById('card-expiry-display').textContent = 'MM/AA';
-}
-
-// URL de la API — cambiar cuando se despliegue en Railway/Render
-const API_URL = 'http://localhost:4000';
-
-async function processPayment() {
-  const btn = document.querySelector('.payment__btn');
-  btn.textContent = 'Procesando...';
-  btn.disabled = true;
-
-  if (!bookingState.datosPaciente) {
-    btn.innerHTML = '<span class="btn-lock">&#128274;</span> Pagar Ahora';
-    btn.disabled = false;
-    return;
-  }
-
-  try {
-    const datos = bookingState.datosPaciente;
-
-    const res = await fetch(`${API_URL}/api/pago/iniciar`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nombre:   datos.nombre,
-        correo:   datos.correo,
-        telefono: datos.telefono,
-        motivo:   datos.motivo,
-        plan:     datos.plan,
-        precio:   bookingState.planPrice,
-        fecha:    datos.fecha,
-        hora:     datos.hora,
-      })
-    });
-
-    const data = await res.json();
-
-    if (!data.url || !data.token) {
-      throw new Error('Respuesta inválida del servidor');
-    }
-
-    bookingState.datosPaciente = null;
-
-    // Redirigir a Webpay
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = data.url;
-    const input = document.createElement('input');
-    input.type  = 'hidden';
-    input.name  = 'token_ws';
-    input.value = data.token;
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
-
-  } catch (error) {
-    console.error('Error iniciando pago:', error);
-    btn.innerHTML = '<span class="btn-lock">&#128274;</span> Pagar Ahora';
-    btn.disabled = false;
-    showAlert('Error al conectar con el sistema de pago. Intenta nuevamente.');
-  }
 }
 
 // ============================================
