@@ -438,8 +438,9 @@
   </div>
 
   <!-- ============================================ -->
-  <!-- COMENTARIOS -->
+  <!-- COMENTARIOS (deshabilitado temporalmente) -->
   <!-- ============================================ -->
+  <!--
   <section class="comments" id="comentarios">
     <div class="comments__content">
       <h2 class="section-title">Lo que dicen mis pacientes</h2>
@@ -482,6 +483,7 @@
       </div>
     </div>
   </section>
+  -->
 
   <!-- ============================================ -->
   <!-- FOOTER -->
@@ -835,7 +837,7 @@
         return { disponible: true, slotsDisponibles, horasOcupadas };
       } catch (e) {
         console.error('Error obteniendo disponibilidad:', e);
-        return { disponible: true, slotsDisponibles: [], horasOcupadas: [] };
+        return { disponible: true, slotsDisponibles: ['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'], horasOcupadas: [] };
       }
     };
     // ─────────────────────────────────────────────────────────────────────
